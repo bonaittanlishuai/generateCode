@@ -44,17 +44,17 @@ public abstract class AbstractTempalteBuilder {
             rootDir=rootDir+File.separator;
         }
         File dir = new File(rootDir + exclusiveDir );
-        String  fileName= File.separator + fileInfo.getFileNewName()!=null?fileInfo.getFileNewName():fileInfo.getFileName() + "." + fileInfo.getGenerateFileType()!=null?fileInfo.getGenerateFileType():"txt";
+        String  fileName= fileInfo.getFileNewName()!=null?fileInfo.getFileNewName():fileInfo.getFileName() + "." + fileInfo.getGenerateFileType()!=null?fileInfo.getGenerateFileType():"txt";
         boolean exists = dir.exists();
         File fileOut=null;
         if(dir.mkdirs() && !exists ){
-            String file = dir.getAbsolutePath() + fileName;
+            String file = dir.getAbsolutePath()+File.separator + fileName;
             fileOut = new File(file);
             if( fileOut.isFile() && !fileOut.exists() ){
                 fileOut.createNewFile();
             }
         }else{
-            fileOut = new File(dir.getAbsolutePath() + fileName);
+            fileOut = new File(dir.getAbsolutePath() +File.separator + fileName);
         }
         Writer out = new FileWriter(fileOut);
         //6.生成
