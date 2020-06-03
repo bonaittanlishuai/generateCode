@@ -26,6 +26,9 @@ generateFileDir=C:/work/develop/idea_work_space/tanlishuai-generateCode/src/main
 removePrefix=tb_
 #删除生成的文件名的后缀 根据数据对应表的名称
 removeSuffix=_test
+#指定生成的表 如果是空或者 * 表示全部  ，多个表名以逗号隔开 如果表不存在则不生的对应的
+tableName=tb_brand
+
 
 模板文件请放到 resources/template 下面 不支持多级目录
 
