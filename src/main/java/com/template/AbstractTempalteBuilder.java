@@ -117,7 +117,7 @@ public abstract class AbstractTempalteBuilder {
             TemplateData templateData = new TemplateData();
             setRowInfo(metaDatum,templateData);
             List<TableDetailInfo> tableDetailInfos = metaDatum.getTableDetailInfo();
-            LinkedList<TemplateData.DetailInfo> templateTableDetailInfos = new LinkedList<>();
+            LinkedList<TemplateData.DetailInfo> templateTableDetailInfos = new LinkedList<TemplateData.DetailInfo>();
             for (TableDetailInfo tableDetailInfo : tableDetailInfos) {
                 setColumnInfo(templateData,templateTableDetailInfos,tableDetailInfo,dbState);
             }
@@ -280,8 +280,6 @@ public abstract class AbstractTempalteBuilder {
         }
     }
 
-    protected static Pattern linePattern = Pattern.compile("_(\\w)");
-
     protected String firstToUpperCase(String str){
         char[] chars = str.toCharArray();
         if(chars.length>0){
@@ -292,6 +290,7 @@ public abstract class AbstractTempalteBuilder {
 
     /** 下划线转驼峰 */
     protected  String lineToHump(String str) {
+        Pattern linePattern = Pattern.compile("_(\\w)");
         String lowerCase = str.toLowerCase();
         Matcher matcher = linePattern.matcher(lowerCase);
         StringBuffer sb = new StringBuffer();

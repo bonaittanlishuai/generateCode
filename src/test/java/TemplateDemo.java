@@ -12,6 +12,6 @@ public class TemplateDemo {
     public static void main(String[] args) {
         TemplateFile templateFile = new TemplateFile();
         List<FileInfo> appointDirFileName = templateFile.getAppointDirFileName();
-
     }
+
 }

@@ -27,7 +27,7 @@ public class TemplateFile {
             dir=DEFAULT_DIR;
         }
         File file = new File(systemRootPath + dir);
-        List<FileInfo> fileNames = new LinkedList<>();
+        List<FileInfo> fileNames = new LinkedList<FileInfo>();
         try {
             getFileNames(fileNames, file);
         }catch ( IOException e){

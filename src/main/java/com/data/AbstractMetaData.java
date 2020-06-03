@@ -1,15 +1,13 @@
 package com.data;
 
 import com.data.dbconnection.ConnectionRelease;
+import com.data.properties.GenerateProperties;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @Description
@@ -27,9 +25,37 @@ public abstract class AbstractMetaData implements MetaData {
         List<Map<String,String>> tableInfo = getTableNames(meteData);
         List<TableData> tableDetailInfo = getTableDetailInfo(meteData, tableInfo);
         ConnectionRelease.closeConn(connection);
+        //过滤表的数据
+        tableDetailInfo=filtrationTable(tableDetailInfo);
         return tableDetailInfo;
     }
 
+    public  List<TableData> filtrationTable(List<TableData> tableDetailInfo){
+        //多个以逗号隔开
+        String filtrationTableName = getFiltrationTableName();
+        if("".equals(filtrationTableName)){
+            return tableDetailInfo;
+        }
+        List<TableData> newResultList=new LinkedList<>();
+        for (TableData tableData : tableDetailInfo) {
+            if(filtrationTableName.contains(tableData.getTableName())){
+                newResultList.add(tableData);
+            }
+        }
+        return newResultList;
+    }
+
+    private String getFiltrationTableName() {
+        Properties properites = GenerateProperties.getProperites();
+        Object tableName = properites.get("tableName");
+        if(tableName!=null && !"".equals(tableName)){
+            String tableNameStr = tableName.toString().trim();
+            if(!"*".equals(tableNameStr)){
+                return tableNameStr;
+            }
+        }
+        return "";
+    }
 
 
     private  List<TableData> getTableDetailInfo(DatabaseMetaData meteData, List<Map<String,String>> tableInfos) {
