@@ -23,6 +23,9 @@ public class MetaDataBuilder {
         String password=properites.getProperty("password");
         MetaData metaData=new MySqlMetaData(url, user, password);
         List<TableData> tableData = metaData.getTableData();
+        if(tableData.size()==0){
+            throw new NullPointerException("表过滤异常tableName 数据库不存在对应的表");
+        }
         tableData.get(0).setDbState(DbStateEnum.MYSQL.getState());
         return tableData;
     }

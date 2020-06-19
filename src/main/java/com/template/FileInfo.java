@@ -30,6 +30,7 @@ public class FileInfo {
     private String serviceFilePath;
     private String entityFilePath;
     private String daoFilePath;
+    private String daoImpleFilePath;
     private String mapperFilePath;
     /**
      * 该文件是什么类型文件 controller service serviceimp

@@ -3,10 +3,7 @@ package com.data;
 import com.data.dbconnection.ConnectionRelease;
 import com.data.properties.GenerateProperties;
 
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.*;
 
 /**
@@ -32,43 +29,52 @@ public abstract class AbstractMetaData implements MetaData {
 
     public  List<TableData> filtrationTable(List<TableData> tableDetailInfo){
         //多个以逗号隔开
-        String filtrationTableName = getFiltrationTableName();
-        if("".equals(filtrationTableName)){
+        List<String> filtrationTableNames = getFiltrationTableName();
+        if(filtrationTableNames.size()==0){
             return tableDetailInfo;
         }
         //是否是模糊匹配
-        boolean isLike=false;
-        if(filtrationTableName.endsWith("*")){
-            filtrationTableName = filtrationTableName.replace("*", "");
-            isLike=true;
-        }
-
         List<TableData> newResultList=new LinkedList<>();
-
         for (TableData tableData : tableDetailInfo) {
-            if(isLike){
-                if(tableData.getTableName().startsWith(filtrationTableName)){
-                    newResultList.add(tableData);
+            for (String filtrationTableName : filtrationTableNames) {
+                //是否是模糊匹配
+                boolean isLike=false;
+                if(filtrationTableName.endsWith("*")){
+                    filtrationTableName = filtrationTableName.replace("*", "");
+                    isLike=true;
                 }
-            }else{
-                if(filtrationTableName.contains(tableData.getTableName())){
-                    newResultList.add(tableData);
+                if(isLike){
+                    if(tableData.getTableName().startsWith(filtrationTableName)){
+                        newResultList.add(tableData);
+                    }
+                }else{
+                    if(filtrationTableName.contains(tableData.getTableName())){
+                        newResultList.add(tableData);
+                    }
                 }
             }
+
         }
         return newResultList;
     }
 
-    private String getFiltrationTableName() {
+    private List<String> getFiltrationTableName() {
         Properties properites = GenerateProperties.getProperites();
         Object tableName = properites.get("tableName");
+        LinkedList<String> resultList = new LinkedList<>();
         if(tableName!=null && !"".equals(tableName)){
             String tableNameStr = tableName.toString().trim();
             if(!"*".equals(tableNameStr)){
-                return tableNameStr;
+                return resultList;
             }
+            for (String str : tableNameStr.split(",")) {
+                resultList.add(str.trim());
+            }
+            //逗号分隔
+            return resultList;
+
         }
-        return "";
+        return resultList;
     }
 
 

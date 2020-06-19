@@ -36,6 +36,7 @@ public class TemplateData {
     private String servicePackage;
     private String entityPackage;
     private String daoPackage;
+    private String daoPackageImpl;
     /**
      * 类名
      */
@@ -44,6 +45,7 @@ public class TemplateData {
     private String serviceClassName;
     private String entityClassName;
     private String daoClassName;
+    private String daoImplClassName;
     /**
      * 别名
      */
@@ -52,6 +54,7 @@ public class TemplateData {
     private String serviceAliasName;
     private String entityAliasName;
     private String daoAliasName;
+    private String daoImplAliasName;
 
     /**
      * //表的字段信息

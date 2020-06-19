@@ -11,9 +11,11 @@ public enum  FileTypeEnum {
     SERVICE("service","service的包","Service"),
     SERVICEIMP("serviceimp","serviceImp","ServiceImp"),
     ENTITY("entity","entity",""),
-    MAPPER("mapper","控制层的包","Mapper"),
+    MAPPER("mapper","dao层的包","Mapper"),
+    MAPPERIMPL("mapperimpl","dao层的实现类包","MapperImpl"),
     MAPPERXML("mapperxml","xml","Mapper"),
     ;
+    //记得都是小写
     private String key;
     private String description;
     /**

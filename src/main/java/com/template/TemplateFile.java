@@ -96,6 +96,10 @@ public class TemplateFile {
                 String entityPackage = properites.getProperty("entityPackage");
                 fileInfo.setEntityFilePath(changePath(entityPackage));
                 fileInfo.setState(FileTypeEnum.ENTITY.getKey());
+            }else if(fileInfo.getFileName().toLowerCase().contains(FileTypeEnum.MAPPERIMPL.getKey())){
+                String daoImplPackage = properites.getProperty("daoImplPackage");
+                fileInfo.setDaoImpleFilePath(changePath(daoImplPackage));
+                fileInfo.setState(FileTypeEnum.MAPPERIMPL.getKey());
             }else if(fileInfo.getFileName().toLowerCase().contains(FileTypeEnum.MAPPER.getKey())){
                 String daoPackage = properites.getProperty("daoPackage");
                 fileInfo.setDaoFilePath(changePath(daoPackage));

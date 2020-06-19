@@ -37,6 +37,7 @@ public abstract class AbstractTempalteBuilder {
         templateData.setServiceImplClassName(templateData.getClassName()+FileTypeEnum.SERVICEIMP.getFileNameSuffix());
         templateData.setEntityClassName(templateData.getClassName()+FileTypeEnum.ENTITY.getFileNameSuffix());
         templateData.setDaoClassName(templateData.getClassName()+FileTypeEnum.MAPPER.getFileNameSuffix());
+        templateData.setDaoImplClassName(templateData.getClassName()+FileTypeEnum.MAPPERIMPL.getFileNameSuffix());
     }
 
     protected void createFile(String rootDir, String exclusiveDir, Template template , FileInfo fileInfo, TemplateData templateData) throws IOException, TemplateException {
@@ -78,6 +79,8 @@ public abstract class AbstractTempalteBuilder {
             fileInfo.setFileNewName(className+FileTypeEnum.MAPPER.getFileNameSuffix());
         }else if(FileTypeEnum.MAPPERXML.getKey().equals(fileInfo.getState())){
             fileInfo.setFileNewName(className+FileTypeEnum.MAPPERXML.getFileNameSuffix());
+        }else if(FileTypeEnum.MAPPERIMPL.getKey().equals(fileInfo.getState())){
+            fileInfo.setFileNewName(className+FileTypeEnum.MAPPERIMPL.getFileNameSuffix());
         }
 
     }
@@ -104,6 +107,8 @@ public abstract class AbstractTempalteBuilder {
             exclusiveDir=fileInfo.getDaoFilePath();
         }else if(state.equals(FileTypeEnum.MAPPERXML.getKey())){
             exclusiveDir=fileInfo.getMapperFilePath();
+        }else if(state.equals(FileTypeEnum.MAPPERIMPL.getKey())){
+            exclusiveDir=fileInfo.getDaoImpleFilePath();
         }
         return exclusiveDir;
     }
@@ -172,6 +177,7 @@ public abstract class AbstractTempalteBuilder {
         templateData.setServiceImplAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.SERVICEIMP.getFileNameSuffix());
         templateData.setEntityAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.ENTITY.getFileNameSuffix());
         templateData.setDaoAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.MAPPER.getFileNameSuffix());
+        templateData.setDaoImplAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.MAPPERIMPL.getFileNameSuffix());
     }
 
     private String namePrefixSuffixHandle(String tableName) {
@@ -180,33 +186,23 @@ public abstract class AbstractTempalteBuilder {
         //是否移除前文件名的前后缀
         String removePrefix=null;
         String removeSuffix=null;
-        if(properites.get("removePrefix")!=null){
+        if(properites.get("removePrefix")!=null && !"".equals(properites.get("removePrefix"))){
             removePrefix=(String)properites.get("removePrefix");
         }
-        if(properites.get("removeSuffix")!=null){
+        if(properites.get("removeSuffix")!=null && !"".equals(properites.get("removeSuffix"))){
             removeSuffix=(String)properites.get("removeSuffix");
         }
-        if(removePrefix!=null){
-            if(tableName.startsWith(removePrefix)){
-                int index = tableName.indexOf(removePrefix);
-                if(index!=-1){
-                    changeTableName=tableName.substring(index+removePrefix.length(),tableName.length());
-                }
-            }
+        if(removePrefix!=null
+                && tableName.startsWith(removePrefix) && tableName.indexOf(removePrefix)!=-1){
+            changeTableName = tableName.substring(tableName.indexOf(removePrefix) + removePrefix.length(), tableName.length());
         }else{
             changeTableName=tableName;
         }
-        if(removeSuffix!=null){
-            if(changeTableName.endsWith(removeSuffix)){
-                int index = changeTableName.lastIndexOf(removeSuffix);
-                if(index!=-1){
-                    changeTableName=changeTableName.substring(0,index-removeSuffix.length());
-                }
-            }
+        if(removeSuffix!=null &&changeTableName.endsWith(removeSuffix) && changeTableName.lastIndexOf(removeSuffix)!=-1 ){
+            changeTableName=changeTableName.substring(0,changeTableName.lastIndexOf(removeSuffix)-removeSuffix.length());
         }else{
-            changeTableName=tableName;
+            changeTableName=changeTableName;
         }
-
         return changeTableName;
 
     }
