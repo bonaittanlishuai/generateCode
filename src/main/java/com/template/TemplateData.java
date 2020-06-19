@@ -19,6 +19,9 @@ public class TemplateData {
     private String pathName;
     private String firstLowerCaseClassName;
     private String firstUpperCaseClassName;
+    /**
+     * 类的别名
+     */
     private String classAlias;
     /**
      * //表的注释

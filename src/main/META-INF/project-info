@@ -15,6 +15,7 @@ servicePackage=com.framework.service
 serviceImplPackage=com.framework.service.impl
 entityPackage=com.framework.dao.entity
 daoPackage=com.framework.dao
+daoImplPackage=com.framework.dao.impl
 //生成 xml文件路径
 mapperFilePath=/mybatisMapper
 //生成的根目录

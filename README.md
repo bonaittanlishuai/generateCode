@@ -7,7 +7,7 @@
 
 #baseMessage.properties的参数说明
 访问路径，暂时只支持mysql  url 路径  user 用户名 password密码
-url=jdbc:mysql://119.23.79.40:3306/cg_goods?characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+url=jdbc:mysql://119.23.79.3:3306/cg_goods?characterEncoding=utf8&useSSL=false&serverTimezone=UTC
 user=root
 password=admin
 
@@ -18,6 +18,7 @@ servicePackage=com.framework.service
 serviceImplPackage=com.framework.service.impl
 entityPackage=com.framework.dao.entity
 daoPackage=com.framework.dao
+daoImplPackage=com.framework.dao.impl
 //生成 xml文件路径
 mapperFilePath=/mybatisMapper
 //生成的根目录
@@ -26,17 +27,18 @@ generateFileDir=C:/work/develop/idea_work_space/tanlishuai-generateCode/src/main
 removePrefix=tb_
 #删除生成的文件名的后缀 根据数据对应表的名称
 removeSuffix=_test
-#指定生成的表 如果是空或者 * 表示全部  ，多个表名以逗号隔开 如果表不存在则不生的对应的
+#指定生成的表 如果是空或者 * 表示全部  ，多个表名以逗号隔开  ab_* 或者 db_* 如果表不存在则不生的对应的
 tableName=tb_brand
 
 
-模板文件请放到 resources/template 下面 不支持多级目录
+需要生成的模板文件请放到 resources/template 下面 
 
 模板使用的是freemark技术  ${}进行注入
 
 模板文件的
 默认的controller_java.ftl  service_java.ftl serviceimpl_java.ftl
 mapper_java.ftl entity_java.ftl  mapperxml_xml.ftl
+mapperimpl_java.ftl
 使用方式   固定名字_生成文件的类型.ftl
 
 模板注入的参数
