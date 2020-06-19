@@ -215,11 +215,13 @@ public abstract class AbstractTempalteBuilder {
         String serviceImplPackage = properites.getProperty("serviceImplPackage");
         String entityPackage = properites.getProperty("entityPackage");
         String daoPackage = properites.getProperty("daoPackage");
+        String daoImplPackage = properites.getProperty("daoImplPackage");
         templateData.setControllerPackage(controllerPackage);
         templateData.setServicePackage(servicePackage);
         templateData.setServiceImplPackage(serviceImplPackage);
         templateData.setEntityPackage(entityPackage);
         templateData.setDaoPackage(daoPackage);
+        templateData.setDaoImplPackage(daoImplPackage);
 
     }
 

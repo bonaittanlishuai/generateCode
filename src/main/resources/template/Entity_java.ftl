@@ -1,30 +1,39 @@
 package ${entityPackage};
 
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-
-import javax.persistence.*;
-import java.io.Serializable;
+import com.mt.newframework.framework.annotations.db.DbColumn;
+import com.mt.newframework.framework.annotations.db.DbTable;
+import com.mt.newframework.framework.annotations.db.MajorKey;
+import com.mt.newframework.utils.page.Page;
 
 /**
  * @Description
  * @Author tanlishuai
  * @Date 2020-05-11 19:23
  */
-@Data
-@ApiModel(description = "${entityClassName}",value = "${entityClassName}")
-@Table(name = "${tableName}")
-public class ${entityClassName} implements Serializable {
+
+${tableRemark}
+@DbTable(tableName = "${tableName}")
+public class ${entityClassName} extends Page{
 
 <#list tableDetailInfos as tableDetailInfo>
-    <#if tableDetailInfo.columnName=="id">
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    <#if tableDetailInfo.columnName=="id" || tableDetailInfo.columnName=="ID">
+    @MajorKey
     </#if>
-    @ApiModelProperty(value = "${tableDetailInfo.columnName}",required = false)
-    @Column(name = "${tableDetailInfo.columnName}")
+    @DbColumn(columnName="${tableDetailInfo.columnName}")
+     /*
+      * ${tableDetailInfo.columnRemark}
+      */
     private ${tableDetailInfo.fieldSimpleType} ${tableDetailInfo.fieldName};
 
+</#list>
+
+<#list tableDetailInfos as tableDetailInfo>
+     public ${tableDetailInfo.fieldSimpleType} ${tableDetailInfo.getMethodName}() {
+        return ${tableDetailInfo.fieldName};
+     }
+
+     public void  ${tableDetailInfo. setMethodName}(${tableDetailInfo.fieldSimpleType} ${tableDetailInfo.fieldName}) {
+        this.${tableDetailInfo.fieldName} = ${tableDetailInfo.fieldName};
+     }
 </#list>
 }

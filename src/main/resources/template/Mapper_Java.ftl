@@ -1,20 +1,28 @@
 package ${daoPackage};
 
 import ${entityPackage}.${entityClassName};
-import tk.mybatis.mapper.common.Mapper;
+
+import com.mt.newframework.utils.page.PageResult;
+
+import java.util.List;
 
 /**
  * @Description
  * @Author tanlishuai
  * @Date 2020-05-13 17:27
- *  updateByPrimaryKey
- *  insert
- *  select
- *  selectOne
- *  selectAll
- *  delete
  *
  */
-public interface ${daoClassName} extends Mapper<${entityClassName}> {
+public interface ${daoClassName} {
 
+      int insert(${entityClassName} ${entityAliasName});
+
+      int update(${entityClassName} ${entityAliasName});
+
+      int deleted(Object id);
+
+      List<${entityClassName}> selectAll();
+
+      List<${entityClassName}> selectById(Object id);
+
+      PageResult pageSelect(${entityClassName} ${entityAliasName});
 }

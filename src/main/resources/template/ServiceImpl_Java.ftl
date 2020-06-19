@@ -1,83 +1,53 @@
 package ${serviceImplPackage};
 
-import ${daoPackage}.${daoClassName};
 import ${entityPackage}.${entityClassName};
+import ${daoPackage}.${daoClassName};
 import ${servicePackage}.${serviceClassName};
-import com.github.pagehelper.Page;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import io.swagger.annotations.ApiModelProperty;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
-import tk.mybatis.mapper.entity.Example;
+
+import com.mt.newframework.framework.spring.ApplicationContextBean;
+import com.mt.newframework.utils.page.PageResult;
 
 import java.util.List;
+
 
 /**
  * @Description
  * @Author tanlishuai
  * @Date 2020-05-13 17:28
  */
-@Service
 public class ${serviceImplClassName} implements ${serviceClassName} {
 
 
-    @Autowired
-    private ${daoClassName} ${daoAliasName};
-
+    private  ${daoClassName}  ${daoAliasName}= (${daoClassName})ApplicationContextBean.getBean("${daoImplAliasName}");
 
     @Override
-    public PageInfo<${entityClassName}> findPage(${entityClassName} ${entityAliasName}, Integer page, Integer size) {
-        PageHelper.startPage(page, size);
-        Example example = createExample(${entityAliasName});
-        List<${entityClassName}> list = findList(${entityAliasName});
-        PageInfo<${entityClassName}> brandPageInfo = new PageInfo<>(list);
-        return brandPageInfo;
+    public int insert(${entityClassName} ${entityAliasName}) {
+        return ${daoAliasName}.insert(${entityAliasName});
     }
 
     @Override
-    public PageInfo<${entityClassName}> findPage(Integer page, Integer size) {
-        PageHelper.startPage(page, size);
-        List<${entityClassName}> brands = ${daoAliasName}.selectAll();
-        PageInfo<${entityClassName}> brandPageInfo = new PageInfo<>(brands);
-        return brandPageInfo;
+    public int update(${entityClassName} ${entityAliasName}) {
+        return ${daoAliasName}.update(sysValidationEntity);
     }
 
     @Override
-    public List<${entityClassName}> findList(${entityClassName} ${entityAliasName}){
-        Example example = createExample(${entityAliasName});
-        return ${daoAliasName}.selectByExample(example);
+    public int deleted(Object id) {
+        return ${daoAliasName}.deleted(id);
     }
 
     @Override
     public List<${entityClassName}> selectAll() {
-        return ${daoAliasName}.selectAll();
+         return ${daoAliasName}.selectAll();
     }
 
     @Override
-    public void add(${entityClassName} ${entityAliasName}) {
-        ${daoAliasName}.insertSelective(${entityAliasName});
+    public List<${entityClassName}> selectById(Object id) {
+        return ${daoAliasName}.selectById(id);
     }
 
     @Override
-    public void update(${entityClassName} ${entityAliasName}) {
-        ${daoAliasName}.updateByPrimaryKeySelective(${entityAliasName});
-    }
-
-    private Example createExample(${entityClassName} ${entityAliasName}){
-        Example example = new Example(${entityClassName}.class);
-        Example.Criteria criteria = example.createCriteria();
-        if(${entityAliasName}!=null){
-            <#list tableDetailInfos as tableDetailInfo>
-                if(!StringUtils.isEmpty(${entityAliasName}.${tableDetailInfo.getMethodName})){
-                    criteria.andLike("${tableDetailInfo.columnName}","%"+${entityAliasName}.${tableDetailInfo.getMethodName}+"%");
-                 }
-            </#list>
-        }
-        return example;
+    public PageResult pageSelect(${entityClassName} ${entityAliasName}) {
+        return ${daoAliasName}.pageSelect(${entityAliasName});
     }
 
 }

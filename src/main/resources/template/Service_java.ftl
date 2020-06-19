@@ -1,10 +1,10 @@
 package ${servicePackage};
 
 import ${entityPackage}.${entityClassName};
-import com.github.pagehelper.PageInfo;
+
+import com.mt.newframework.utils.page.PageResult;
 
 import java.util.List;
-
 /**
  * @Description
  * @Author tanlishuai
@@ -12,16 +12,15 @@ import java.util.List;
  */
 public interface ${serviceClassName} {
 
-    PageInfo<${entityClassName}> findPage(${entityClassName} ${entityAliasName},Integer page, Integer size);
+    int insert(${entityClassName} ${entityAliasName});
 
+    int update(${entityClassName} ${entityAliasName});
 
-    PageInfo<${entityClassName}> findPage(Integer page, Integer size);
-
-    List<${entityClassName}> findList(${entityClassName} ${entityAliasName});
+    int deleted(Object id);
 
     List<${entityClassName}> selectAll();
 
-    void add(${entityClassName} ${entityAliasName});
+    List<${entityClassName}> selectById(Object id);
 
-    void update(${entityClassName} ${entityAliasName});
+    PageResult pageSelect(${entityClassName} ${entityAliasName});
 }

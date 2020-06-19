@@ -39,7 +39,7 @@ public class TemplateData {
     private String servicePackage;
     private String entityPackage;
     private String daoPackage;
-    private String daoPackageImpl;
+    private String daoImplPackage;
     /**
      * 类名
      */

@@ -56,16 +56,19 @@ mapperimpl_java.ftl
  ${servicePackage}  com.framework.service
  ${entityPackage}   com.framework.dao.entity
  ${daoPackage}  com.framework.dao
+ ${daoImplPackage} com.framework.dao.impl
  ${controllerClassName}   OtmsBrandController
  ${serviceImplClassName}  OtmsBrandServiceImpl
  ${serviceClassName} OtmsBrandService
  ${entityClassName}  OtmsBrand
  ${daoClassName}   OtmsBrandMapper
+ ${daoImplClassName}   OtmsBrandMapperImpl
  ${controllerAliasName}   otmsBrandController
  ${serviceImplAliasName}  otmsBrandServiceImpl
  ${serviceAliasName}   otmsBrandService
  ${entityAliasName}  otmsBrand
  ${daoAliasName}  otmsBrandMapper
+ ${daoImplAliasName}  otmsBrandMapper
 
  //表的字段信息
  <#list  tableDetailInfos as tableDetailInfo>
@@ -75,9 +78,9 @@ mapperimpl_java.ftl
  ${ tableDetailInfo.fieldType} java.lang.String
  ${tableDetailInfo. fieldSimpleType} String
  ${ tableDetailInfo.firstUpperCaseFieldName}/ BrandName
- ${tableDetailInfo. getMethodName} getBrandName
- ${tableDetailInfo. setMethodName} setBrandName
- ${tableDetailInfo. columnRemark} 品牌字段名
+ ${tableDetailInfo.getMethodName} getBrandName
+ ${tableDetailInfo.setMethodName} setBrandName
+ ${tableDetailInfo.columnRemark} 品牌字段名
 
  </#list>
 
