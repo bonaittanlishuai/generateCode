@@ -48,13 +48,13 @@ public abstract class AbstractTempalteBuilder {
         boolean exists = dir.exists();
         File fileOut=null;
         if(dir.mkdirs() && !exists ){
-            String file = dir.getAbsolutePath()+File.separator + fileName;
+            String file = dir.getAbsolutePath()+File.separator + fileName+"."+fileInfo.getGenerateFileType();
             fileOut = new File(file);
             if( fileOut.isFile() && !fileOut.exists() ){
                 fileOut.createNewFile();
             }
         }else{
-            fileOut = new File(dir.getAbsolutePath() +File.separator + fileName);
+            fileOut = new File(dir.getAbsolutePath() +File.separator + fileName+"."+fileInfo.getGenerateFileType());
         }
         Writer out = new FileWriter(fileOut);
         //6.生成
@@ -236,19 +236,19 @@ public abstract class AbstractTempalteBuilder {
         String mapperFilePath = properites.getProperty("mapperFilePath");
         String generateFileDir = properites.getProperty("generateFileDir");
         if(controllerPackage==null || "".equals(controllerPackage)){
-            properites.setProperty("controllerPackage","com.template.controller");
+            properites.setProperty("controllerPackage","com.framework.controller");
         }
         if(servicePackage==null || "".equals(servicePackage)){
-            properites.setProperty("servicePackage","com.template.service");
+            properites.setProperty("servicePackage","com.framework.service");
         }
         if(serviceImplPackage==null || "".equals(serviceImplPackage)){
-            properites.setProperty("serviceImplPackage","com.template.service.impl");
+            properites.setProperty("serviceImplPackage","com.framework.service.impl");
         }
         if(entityPackage==null || "".equals(entityPackage)){
-            properites.setProperty("entityPackage","com.template.entity");
+            properites.setProperty("entityPackage","com.framework.entity");
         }
         if(daoPackage==null || "".equals(daoPackage)){
-            properites.setProperty("daoPackage","com.template.dao");
+            properites.setProperty("daoPackage","com.framework.dao");
         }
         if(mapperFilePath==null || "".equals(mapperFilePath)){
             properites.setProperty("mapperFilePath","/mapper");
@@ -256,6 +256,8 @@ public abstract class AbstractTempalteBuilder {
         if(generateFileDir==null || "".equals(generateFileDir)){
             properites.setProperty("generateFileDir", PathUtils.getWorkDir());
         }
+
+        GenerateProperties.setProperties(properites);
     }
 
     protected void setJavaType(TemplateData.DetailInfo detailInfo, String dbState) {

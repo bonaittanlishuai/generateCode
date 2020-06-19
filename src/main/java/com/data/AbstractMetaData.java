@@ -36,10 +36,24 @@ public abstract class AbstractMetaData implements MetaData {
         if("".equals(filtrationTableName)){
             return tableDetailInfo;
         }
+        //是否是模糊匹配
+        boolean isLike=false;
+        if(filtrationTableName.endsWith("*")){
+            filtrationTableName = filtrationTableName.replace("*", "");
+            isLike=true;
+        }
+
         List<TableData> newResultList=new LinkedList<>();
+
         for (TableData tableData : tableDetailInfo) {
-            if(filtrationTableName.contains(tableData.getTableName())){
-                newResultList.add(tableData);
+            if(isLike){
+                if(tableData.getTableName().startsWith(filtrationTableName)){
+                    newResultList.add(tableData);
+                }
+            }else{
+                if(filtrationTableName.contains(tableData.getTableName())){
+                    newResultList.add(tableData);
+                }
             }
         }
         return newResultList;
