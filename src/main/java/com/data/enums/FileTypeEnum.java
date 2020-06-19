@@ -19,11 +19,11 @@ public enum  FileTypeEnum {
     /**
      * //生成文件别名后缀
      */
-    private String fiewNameSuffix;
-    FileTypeEnum(String key,String description,String fiewNameSuffix){
+    private String fileNameSuffix;
+    FileTypeEnum(String key,String description,String fileNameSuffix){
         this.key=key;
         this.description=description;
-        this.fiewNameSuffix=fiewNameSuffix;
+        this.fileNameSuffix=fileNameSuffix;
     }
 
     public String getKey() {
@@ -43,11 +43,11 @@ public enum  FileTypeEnum {
         this.description = description;
     }
 
-    public String getFiewNameSuffix() {
-        return fiewNameSuffix;
+    public String getFileNameSuffix() {
+        return fileNameSuffix;
     }
 
-    public void setFiewNameSuffix(String fiewNameSuffix) {
-        this.fiewNameSuffix = fiewNameSuffix;
+    public void setFileNameSuffix(String fileNameSuffix) {
+        this.fileNameSuffix = fileNameSuffix;
     }
 }

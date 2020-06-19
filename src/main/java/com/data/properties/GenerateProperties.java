@@ -13,9 +13,8 @@ public class GenerateProperties {
 
     private static final String DEFAULT_FILE="generateInfo.properties";
 
-
+    private static Properties properties = new Properties();
     public static Properties getProperites(){
-         Properties properties = new Properties();
         try {
             InputStream resourceAsStream = BaseProperties.class.getClassLoader().getResourceAsStream(DEFAULT_FILE);
             properties.load(resourceAsStream);
@@ -26,7 +25,7 @@ public class GenerateProperties {
         }
     }
 
-   public static void setProperties(Properties properties){
+   public static void setProperties(){
        try {
            URL resourceUrl = BaseProperties.class.getClassLoader().getResource(DEFAULT_FILE);
            FileOutputStream fileOutputStream = new FileOutputStream(resourceUrl.getFile());

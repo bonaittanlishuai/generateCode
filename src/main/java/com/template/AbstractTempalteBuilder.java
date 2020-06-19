@@ -32,11 +32,11 @@ public abstract class AbstractTempalteBuilder {
 
 
     protected void setPackageClassName(TemplateData templateData) {
-        templateData.setControllerClassName(templateData.getClassName()+ FileTypeEnum.CONTOLLER.getFiewNameSuffix());
-        templateData.setServiceClassName(templateData.getClassName()+FileTypeEnum.SERVICE.getFiewNameSuffix());
-        templateData.setServiceImplClassName(templateData.getClassName()+FileTypeEnum.SERVICEIMP.getFiewNameSuffix());
-        templateData.setEntityClassName(templateData.getClassName()+FileTypeEnum.ENTITY.getFiewNameSuffix());
-        templateData.setDaoClassName(templateData.getClassName()+FileTypeEnum.MAPPER.getFiewNameSuffix());
+        templateData.setControllerClassName(templateData.getClassName()+ FileTypeEnum.CONTOLLER.getFileNameSuffix());
+        templateData.setServiceClassName(templateData.getClassName()+FileTypeEnum.SERVICE.getFileNameSuffix());
+        templateData.setServiceImplClassName(templateData.getClassName()+FileTypeEnum.SERVICEIMP.getFileNameSuffix());
+        templateData.setEntityClassName(templateData.getClassName()+FileTypeEnum.ENTITY.getFileNameSuffix());
+        templateData.setDaoClassName(templateData.getClassName()+FileTypeEnum.MAPPER.getFileNameSuffix());
     }
 
     protected void createFile(String rootDir, String exclusiveDir, Template template , FileInfo fileInfo, TemplateData templateData) throws IOException, TemplateException {
@@ -67,17 +67,17 @@ public abstract class AbstractTempalteBuilder {
     protected void setNewFileName(FileInfo fileInfo, String className) {
 
         if(FileTypeEnum.CONTOLLER.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.CONTOLLER.getFiewNameSuffix());
+            fileInfo.setFileNewName(className+FileTypeEnum.CONTOLLER.getFileNameSuffix());
         }else if(FileTypeEnum.SERVICEIMP.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.SERVICEIMP.getFiewNameSuffix());
+            fileInfo.setFileNewName(className+FileTypeEnum.SERVICEIMP.getFileNameSuffix());
         }else if(FileTypeEnum.SERVICE.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.SERVICE.getFiewNameSuffix());
+            fileInfo.setFileNewName(className+FileTypeEnum.SERVICE.getFileNameSuffix());
         }else if(FileTypeEnum.ENTITY.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.ENTITY.getFiewNameSuffix());
+            fileInfo.setFileNewName(className+FileTypeEnum.ENTITY.getFileNameSuffix());
         }else if(FileTypeEnum.MAPPER.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.MAPPER.getFiewNameSuffix());
+            fileInfo.setFileNewName(className+FileTypeEnum.MAPPER.getFileNameSuffix());
         }else if(FileTypeEnum.MAPPERXML.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.MAPPERXML.getFiewNameSuffix());
+            fileInfo.setFileNewName(className+FileTypeEnum.MAPPERXML.getFileNameSuffix());
         }
 
     }
@@ -167,11 +167,11 @@ public abstract class AbstractTempalteBuilder {
 
     protected void setAliasName(TemplateData templateData) {
         templateData.setClassAlias(templateData.getFirstLowerCaseClassName());
-        templateData.setControllerAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.CONTOLLER.getFiewNameSuffix());
-        templateData.setServiceAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.SERVICE.getFiewNameSuffix());
-        templateData.setServiceImplAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.SERVICEIMP.getFiewNameSuffix());
-        templateData.setEntityAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.ENTITY.getFiewNameSuffix());
-        templateData.setDaoAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.MAPPER.getFiewNameSuffix());
+        templateData.setControllerAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.CONTOLLER.getFileNameSuffix());
+        templateData.setServiceAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.SERVICE.getFileNameSuffix());
+        templateData.setServiceImplAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.SERVICEIMP.getFileNameSuffix());
+        templateData.setEntityAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.ENTITY.getFileNameSuffix());
+        templateData.setDaoAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.MAPPER.getFileNameSuffix());
     }
 
     private String namePrefixSuffixHandle(String tableName) {
@@ -257,7 +257,7 @@ public abstract class AbstractTempalteBuilder {
             properites.setProperty("generateFileDir", PathUtils.getWorkDir());
         }
 
-        GenerateProperties.setProperties(properites);
+        GenerateProperties.setProperties();
     }
 
     protected void setJavaType(TemplateData.DetailInfo detailInfo, String dbState) {
