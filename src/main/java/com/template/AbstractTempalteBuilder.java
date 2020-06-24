@@ -6,6 +6,7 @@ import com.data.delegate.FieldTypeDelegate;
 import com.data.delegate.GenerateInfoDelegate;
 import com.data.delegate.entity.FieldType;
 import com.data.enums.FileTypeEnum;
+import com.data.enums.JavaKeyWord;
 import com.data.properties.GenerateProperties;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -129,6 +130,12 @@ public abstract class AbstractTempalteBuilder {
         detailInfo.setColumnName(columnName);
         detailInfo.setColumnRemark(tableDetailInfo.getColumnRemark());
         String fieldName = lineToHump(columnName);
+        //如果字段名与java关键字相等则进行转换
+        for (JavaKeyWord javaKeyWord : JavaKeyWord.values()) {
+            if(javaKeyWord.getKeyWord().equalsIgnoreCase(fieldName)){
+                fieldName=javaKeyWord.getChangeName();
+            }
+        }
         detailInfo.setFieldName(fieldName);
         String firstToUpperCase = firstToUpperCase(fieldName);
         detailInfo.setFirstUpperCaseFieldName(firstToUpperCase);
@@ -136,7 +143,6 @@ public abstract class AbstractTempalteBuilder {
         detailInfo.setSetMethodName("set"+firstToUpperCase);
         //java 类型 设置
         setJavaType(detailInfo,dbState);
-
         templateTableDetailInfos.add(detailInfo);
     }
 
@@ -163,9 +169,14 @@ public abstract class AbstractTempalteBuilder {
 
     protected void setRowInfo(TableData metaDatum, TemplateData templateData) {
         String tableName = metaDatum.getTableName();
+        for (JavaKeyWord javaKeyWord : JavaKeyWord.values()) {
+            if(javaKeyWord.getKeyWord().equalsIgnoreCase(tableName)){
+                throw new ClassCastException("表名不能与java关键字相同");
+            }
+        }
         //设置文件包的信息
         setPackageInfo(templateData);
-        String className=namePrefixSuffixHandle(tableName);
+        String className=nameProfixSuffixHandle(tableName);
         //下劃線轉駝峰
         className=  lineToHump(className);
         templateData.setFirstLowerCaseClassName(className);
@@ -192,7 +203,7 @@ public abstract class AbstractTempalteBuilder {
         templateData.setDaoImplAliasName(templateData.getFirstLowerCaseClassName()+FileTypeEnum.MAPPERIMPL.getFileNameSuffix());
     }
 
-    private String namePrefixSuffixHandle(String tableName) {
+    private String nameProfixSuffixHandle(String tableName) {
         Properties properites = GenerateProperties.getProperites();
         String changeTableName="";
         //是否移除前文件名的前后缀
@@ -255,8 +266,7 @@ public abstract class AbstractTempalteBuilder {
         boolean isExistType=false;
         List<FieldType> fieldTypeList = FieldTypeDelegate.getInstance().getFieldTypeList(dbState);
         for (FieldType fieldType : fieldTypeList) {
-            if(fieldType.getDataType().equals(columnType)
-                    || fieldType.getDataType().equals(columnType.toLowerCase())){
+            if(fieldType.getDataType().equalsIgnoreCase(columnType)){
                 detailInfo.setFieldSimpleType((fieldType.getSimpleType()));
                 detailInfo.setFieldType(fieldType.getJavaType());
                 isExistType=true;
