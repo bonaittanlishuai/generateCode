@@ -10,4 +10,10 @@ import java.util.List;
 public interface MetaData {
 
     public List<TableData> getTableData();
+
+    public MetaData setUrl(String url) ;
+
+    public MetaData setUser(String user);
+
+    public MetaData setPassword(String password) ;
 }

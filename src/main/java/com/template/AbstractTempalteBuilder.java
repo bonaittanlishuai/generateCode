@@ -1,12 +1,11 @@
 package com.template;
 
-import com.data.MetaDataBuilder;
-import com.data.PathUtils;
-import com.data.TableData;
-import com.data.TableDetailInfo;
-import com.data.enums.DbStateEnum;
+import com.data.*;
+import com.data.delegate.ExclusiveDirDelegate;
+import com.data.delegate.FieldTypeDelegate;
+import com.data.delegate.GenerateInfoDelegate;
+import com.data.delegate.entity.FieldType;
 import com.data.enums.FileTypeEnum;
-import com.data.enums.MysqlFieldTypeEnum;
 import com.data.properties.GenerateProperties;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -15,9 +14,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.Writer;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,7 +25,20 @@ import java.util.regex.Pattern;
  */
 public abstract class AbstractTempalteBuilder {
 
+    public AbstractTempalteBuilder(){
+        init();
+    }
+
+    private  void init(){
+        Properties properites = GenerateProperties.getProperites();
+        generateInfoCheckAndInit(properites);
+    }
+
+
+
     public  abstract void  generateTemplate()throws IOException, TemplateException ;
+
+
 
 
     protected void setPackageClassName(TemplateData templateData) {
@@ -66,23 +76,12 @@ public abstract class AbstractTempalteBuilder {
     }
 
     protected void setNewFileName(FileInfo fileInfo, String className) {
-
-        if(FileTypeEnum.CONTOLLER.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.CONTOLLER.getFileNameSuffix());
-        }else if(FileTypeEnum.SERVICEIMP.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.SERVICEIMP.getFileNameSuffix());
-        }else if(FileTypeEnum.SERVICE.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.SERVICE.getFileNameSuffix());
-        }else if(FileTypeEnum.ENTITY.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.ENTITY.getFileNameSuffix());
-        }else if(FileTypeEnum.MAPPER.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.MAPPER.getFileNameSuffix());
-        }else if(FileTypeEnum.MAPPERXML.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.MAPPERXML.getFileNameSuffix());
-        }else if(FileTypeEnum.MAPPERIMPL.getKey().equals(fileInfo.getState())){
-            fileInfo.setFileNewName(className+FileTypeEnum.MAPPERIMPL.getFileNameSuffix());
+        for (FileTypeEnum fileTypeEnum : FileTypeEnum.values()) {
+            if(fileTypeEnum.getKey().equals(fileInfo.getState())){
+                fileInfo.setFileNewName(className+fileTypeEnum.getFileNameSuffix());
+                break;
+            }
         }
-
     }
 
 
@@ -93,24 +92,10 @@ public abstract class AbstractTempalteBuilder {
      */
     protected String getExclusiveDir(FileInfo fileInfo) {
         String state = fileInfo.getState();
-        if(state==null){state="";}
-        String exclusiveDir="";
-        if(state.equals(FileTypeEnum.CONTOLLER.getKey())){
-            exclusiveDir=fileInfo.getControllerFilePath();
-        }else if(state.equals(FileTypeEnum.SERVICEIMP.getKey())){
-            exclusiveDir=fileInfo.getServiceImplFilePath();
-        }else if(state.equals(FileTypeEnum.SERVICE.getKey())){
-            exclusiveDir=fileInfo.getServiceFilePath();
-        }else if(state.equals(FileTypeEnum.ENTITY.getKey())){
-            exclusiveDir=fileInfo.getEntityFilePath();
-        }else if(state.equals(FileTypeEnum.MAPPER.getKey())){
-            exclusiveDir=fileInfo.getDaoFilePath();
-        }else if(state.equals(FileTypeEnum.MAPPERXML.getKey())){
-            exclusiveDir=fileInfo.getMapperFilePath();
-        }else if(state.equals(FileTypeEnum.MAPPERIMPL.getKey())){
-            exclusiveDir=fileInfo.getDaoImpleFilePath();
+        if(state==null || "".equals(state)){
+            return "";
         }
-        return exclusiveDir;
+        return ExclusiveDirDelegate.getInstance().getResult(state, fileInfo);
     }
 
     protected List<TemplateData> getTemplateData() {
@@ -122,17 +107,22 @@ public abstract class AbstractTempalteBuilder {
             TemplateData templateData = new TemplateData();
             setRowInfo(metaDatum,templateData);
             List<TableDetailInfo> tableDetailInfos = metaDatum.getTableDetailInfo();
-            LinkedList<TemplateData.DetailInfo> templateTableDetailInfos = new LinkedList<TemplateData.DetailInfo>();
+            List<TemplateData.DetailInfo> templateTableDetailInfos = new LinkedList<TemplateData.DetailInfo>();
             for (TableDetailInfo tableDetailInfo : tableDetailInfos) {
                 setColumnInfo(templateData,templateTableDetailInfos,tableDetailInfo,dbState);
             }
+
             templateData.setTableDetailInfos(templateTableDetailInfos);
+
+            //设置实体类额外需要导入的包;
+            setEntityImportPackage(templateData,dbState);
+
             templateDataList.add(templateData);
         }
         return templateDataList;
     }
 
-    protected void setColumnInfo(TemplateData templateData,LinkedList<TemplateData.DetailInfo> templateTableDetailInfos, TableDetailInfo tableDetailInfo,String dbState) {
+    protected void setColumnInfo(TemplateData templateData,List<TemplateData.DetailInfo> templateTableDetailInfos, TableDetailInfo tableDetailInfo,String dbState) {
         String columnName = tableDetailInfo.COLUMN_NAME;
         TemplateData.DetailInfo detailInfo = templateData.new DetailInfo();
         detailInfo.setColumnType(tableDetailInfo.getCOLUMN_TYPE());
@@ -146,7 +136,29 @@ public abstract class AbstractTempalteBuilder {
         detailInfo.setSetMethodName("set"+firstToUpperCase);
         //java 类型 设置
         setJavaType(detailInfo,dbState);
+
         templateTableDetailInfos.add(detailInfo);
+    }
+
+    /**
+     * 设置实体类额外需要导入的包;
+     * @param templateData
+     * @Param 对应数据的表示
+     */
+    private void setEntityImportPackage(TemplateData templateData, String dbState) {
+        Set<String> entityImportPackageSet = new LinkedHashSet<>();
+        List<FieldType> fieldTypes = FieldTypeDelegate.getInstance().getFieldTypeList(dbState);
+        for (TemplateData.DetailInfo detailInfo : templateData.getTableDetailInfos()) {
+            //基本数据类型的包装类 与 string 不用导包, 标记为 isPermistImport为 1
+            String fieldType = detailInfo.getFieldType();
+            for (FieldType type : fieldTypes) {
+                if(type.getJavaType().equals(fieldType) && type.getIsPermitImport()==1){
+                    entityImportPackageSet.add(fieldType);
+                }
+            }
+
+        }
+        templateData.setEntityImportPackages(entityImportPackageSet);
     }
 
     protected void setRowInfo(TableData metaDatum, TemplateData templateData) {
@@ -226,57 +238,33 @@ public abstract class AbstractTempalteBuilder {
     }
 
     protected void generateInfoCheckAndInit(Properties properites) {
-        String controllerPackage = properites.getProperty("controllerPackage");
-        String servicePackage = properites.getProperty("servicePackage");
-        String serviceImplPackage = properites.getProperty("serviceImplPackage");
-        String entityPackage = properites.getProperty("entityPackage");
-        String daoPackage = properites.getProperty("daoPackage");
-        String mapperFilePath = properites.getProperty("mapperFilePath");
-        String generateFileDir = properites.getProperty("generateFileDir");
-        if(controllerPackage==null || "".equals(controllerPackage)){
-            properites.setProperty("controllerPackage","com.framework.controller");
+        Enumeration<String> enumeration = (Enumeration<String>) properites.propertyNames();
+        while (enumeration.hasMoreElements()){
+            String key = enumeration.nextElement();
+            String value = properites.getProperty(key);
+            if(value==null || "".equals(value)){
+                properites.setProperty(key, GenerateInfoDelegate.getValue(key));
+            }
         }
-        if(servicePackage==null || "".equals(servicePackage)){
-            properites.setProperty("servicePackage","com.framework.service");
-        }
-        if(serviceImplPackage==null || "".equals(serviceImplPackage)){
-            properites.setProperty("serviceImplPackage","com.framework.service.impl");
-        }
-        if(entityPackage==null || "".equals(entityPackage)){
-            properites.setProperty("entityPackage","com.framework.entity");
-        }
-        if(daoPackage==null || "".equals(daoPackage)){
-            properites.setProperty("daoPackage","com.framework.dao");
-        }
-        if(mapperFilePath==null || "".equals(mapperFilePath)){
-            properites.setProperty("mapperFilePath","/mapper");
-        }
-        if(generateFileDir==null || "".equals(generateFileDir)){
-            properites.setProperty("generateFileDir", PathUtils.getWorkDir());
-        }
-
+        //更新
         GenerateProperties.setProperties();
     }
 
     protected void setJavaType(TemplateData.DetailInfo detailInfo, String dbState) {
         String columnType = detailInfo.getColumnType();
         boolean isExistType=false;
-        if(DbStateEnum.MYSQL.getState().equals(dbState)){
-            for (MysqlFieldTypeEnum value : MysqlFieldTypeEnum.values()) {
-                if(value.getDataType().equals(columnType)){
-                    detailInfo.setFieldSimpleType((value.getSimpleType()));
-                    detailInfo.setFieldType(value.getJavaType());
-                    isExistType=true;
-                    return;
-                }
+        List<FieldType> fieldTypeList = FieldTypeDelegate.getInstance().getFieldTypeList(dbState);
+        for (FieldType fieldType : fieldTypeList) {
+            if(fieldType.getDataType().equals(columnType)
+                    || fieldType.getDataType().equals(columnType.toLowerCase())){
+                detailInfo.setFieldSimpleType((fieldType.getSimpleType()));
+                detailInfo.setFieldType(fieldType.getJavaType());
+                isExistType=true;
+                return;
             }
-        }else if(DbStateEnum.ORACLE.getState().equals(dbState)){
-
-        }else {
-
         }
         if(!isExistType){
-            throw new NullPointerException(detailInfo.getColumnName()+"的数据类型"+detailInfo.getColumnType()+"没有匹配到对应的java类型，请到对应的枚举类设置");
+            throw new NullPointerException(dbState+"数据库的"+detailInfo.getColumnName()+"的数据类型"+detailInfo.getColumnType()+"没有匹配到对应的java类型，请到对应的枚举类设置");
         }
     }
 

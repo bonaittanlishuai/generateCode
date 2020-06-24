@@ -35,8 +35,6 @@ public class FreemarkerBuilder extends AbstractTempalteBuilder{
      */
     @Override
     public void generateTemplate() throws IOException, TemplateException {
-        Properties properites = GenerateProperties.getProperites();
-        generateInfoCheckAndInit(properites);
         Configuration configuration = new Configuration();
         String ftlDir=PathUtils.getSystemRootPath()+TemplateFile.DEFAULT_DIR;
         configuration.setDirectoryForTemplateLoading(new File(ftlDir));
@@ -56,14 +54,19 @@ public class FreemarkerBuilder extends AbstractTempalteBuilder{
                         configuration.getTemplate(fileInfo.getFileNameIncludeSuffix());
                 String rootDir = fileInfo.getGenerateFileDir();
                 //专属目录
-                String exclusiveDir = getExclusiveDir(fileInfo);
+                String exclusiveDir = super.getExclusiveDir(fileInfo);
                 //生成文件
                 createFile(rootDir,exclusiveDir,template,fileInfo,templateData);
             }
         }
+
+        specialGenerateTemplate(templateDatas);
     }
 
-
-
+    /**
+     * 指定的模板，留给子类实现
+     */
+    protected void specialGenerateTemplate(List<TemplateData> templateDatas){
+    }
 
 }

@@ -16,6 +16,10 @@ public class MySqlMetaData extends AbstractMetaData{
     private String user;
     private String password;
 
+    public MySqlMetaData(){
+
+    }
+
     public MySqlMetaData(String url,String user,String password){
         this.url=url;
         this.user=user;
@@ -29,4 +33,18 @@ public class MySqlMetaData extends AbstractMetaData{
         return connection;
     }
 
+    public MySqlMetaData setUrl(String url) {
+        this.url = url;
+        return this;
+    }
+
+    public MySqlMetaData setUser(String user) {
+        this.user = user;
+        return this;
+    }
+
+    public MySqlMetaData setPassword(String password) {
+        this.password = password;
+        return this;
+    }
 }

@@ -1,5 +1,6 @@
 package com.data;
 
+import com.data.delegate.MetaDataDelegate;
 import com.data.enums.DbStateEnum;
 import com.data.properties.BaseProperties;
 
@@ -8,68 +9,56 @@ import java.util.Properties;
 
 public class MetaDataBuilder {
 
-    private static MetaDataBuilder metaDataBuilder = new MetaDataBuilder();
 
     public static MetaDataBuilder getInstance() {
-        return metaDataBuilder;
+        return InnerClass.metaDataBuilder;
     }
 
     private MetaDataBuilder() {
-    }
-
-    private  List<TableData> getMysqlMetaData(Properties properites){
-        String url = properites.getProperty("url");
-        String user =properites.getProperty("user");
-        String password=properites.getProperty("password");
-        MetaData metaData=new MySqlMetaData(url, user, password);
-        List<TableData> tableData = metaData.getTableData();
-        if(tableData.size()==0){
-            throw new NullPointerException("表过滤异常tableName 数据库不存在对应的表");
+        if(InnerClass.metaDataBuilder!=null){
+            throw new NullPointerException("该类是单例");
         }
-        tableData.get(0).setDbState(DbStateEnum.MYSQL.getState());
-        return tableData;
-    }
-
-
-    private  List<TableData> getOracleMetaData(Properties properites){
-        String url = properites.getProperty("url");
-        String user =properites.getProperty("user");
-        String password=properites.getProperty("password");
-        MetaData metaData=new OracleMetaData(url, user, password);
-        List<TableData> tableData = metaData.getTableData();
-        tableData.get(0).setDbState(DbStateEnum.ORACLE.getState());
-        return tableData;
     }
 
     public List<TableData> getMetaData(){
         BaseProperties baseProperties = new BaseProperties();
         Properties properites = baseProperties.getProperites();
         emptyValidate(properites);
+        String dataState=properites.getProperty("dataState");
         String url = properites.getProperty("url");
-        if(url.startsWith(DbStateEnum.MYSQL.getState())){
-           return getMysqlMetaData(properites);
-        }else if(url.startsWith(DbStateEnum.ORACLE.getState())){
-           return getOracleMetaData(properites);
-        }else{
-           return getMysqlMetaData(properites);
+        String user =properites.getProperty("user");
+        String password=properites.getProperty("password");
+        MetaData metaData = MetaDataDelegate.getInstance().getMetaData(dataState).setUrl(url).setUser(user).setPassword(password);
+        List<TableData> tableData = metaData.getTableData();
+        if(tableData.size()==0){
+            throw new NullPointerException("表过滤异常tableName 数据库不存在对应的表");
         }
-
+        tableData.get(0).setDbState(dataState);
+        return  tableData;
     }
 
     private void emptyValidate(Properties properites) {
         String url = properites.getProperty("url");
         String user =properites.getProperty("user");
         String password=properites.getProperty("password");
+        String dataState=properites.getProperty("dataState");
 
         if(url==null){
-            throw new NullPointerException("數據庫連接不能為空");
+            throw new NullPointerException("数据库链接不能為空");
         }
         if(user==null){
-            throw new NullPointerException("用戶名不能為空");
+            throw new NullPointerException("用户名不能為空");
         }
         if(password==null){
-            throw new NullPointerException("密碼不能為空");
+            throw new NullPointerException("密码不能為空");
         }
+        if(dataState==null){
+            throw new NullPointerException("数据库声明不能为空");
+        }
+    }
+
+    private static class InnerClass{
+        private static MetaDataBuilder metaDataBuilder = new MetaDataBuilder();
     }
 
 }

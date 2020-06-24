@@ -4,6 +4,7 @@ package com.template;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Description
@@ -58,6 +59,10 @@ public class TemplateData {
     private String entityAliasName;
     private String daoAliasName;
     private String daoImplAliasName;
+    /**
+     * 实体类需要额外导入的包集合ff
+     */
+    private Set<String> entityImportPackages;
 
     /**
      * //表的字段信息

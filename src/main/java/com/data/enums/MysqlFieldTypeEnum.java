@@ -6,35 +6,45 @@ package com.data.enums;
  * @Date 2020-05-09 13:05
  */
 public enum MysqlFieldTypeEnum {
-    VARCHAR("VARCHAR","java.lang.String","String"),
-    INT("INT","java.lang.Integer","Integer"),
-    CHAR("CHAR","java.lang.String","String"),
-    BLOB("BLOB","java.lang.Byte","Byte"),
-    TEXT("TEXT","java.lang.String","String"),
-    INTEGER("INTEGER","java.lang.Long","Long"),
-    TINYINT("TINYINT","java.lang.Integer","Integer"),
-    SMALLINT("SMALLINT","java.lang.Integer","Integer"),
-    MEDIUMINT("MEDIUMINT","java.lang.Integer","Integer"),
-    BIT("BIT","java.lang.Boolean","Boolean"),
-    BIGINT("BIGINT","java.math.BigInteger","BigInteger"),
-    FLOAT("FLOAT","java.lang.Float","Float"),
-    DOUBLE("DOUBLE","java.lang.DOUBLE","DOUBLE"),
-    DECIMAL("DECIMAL","java.math.BigDecimal","BigDecimal"),
-    BOOLEAN("BOOLEAN","java.lang.Integer","Integer"),
-    ID("ID","java.lang.Long","Long"),
-    DATE("DATE","java.sql.Date","Date"),
-    TIME("TIME","java.sql.Time","Time"),
-    DATETIME("DATETIME","java.sql.Timestamp","Timestamp"),
-    TIMESTAMP("TIMESTAMP","java.sql.Timestamp","Timestamp"),
-    YEAR("YEAR","java.sql.Date","Date"),
+    VARCHAR("VARCHAR","java.lang.String","String",0),
+    INT("INT","java.lang.Integer","Integer",0),
+    INGEGER("INGEGER","java.lang.Integer","Integer",0),
+    CHAR("CHAR","java.lang.String","String",0),
+    BLOB("BLOB","java.sql.Blob","Blob",1),
+    TEXT("TEXT","java.lang.String","String",0),
+    INTEGER("INTEGER","java.lang.Long","Long",0),
+    TINYINT("TINYINT","java.lang.Byte","Byte",0),
+    SMALLINT("SMALLINT","java.lang.Short","Short",0),
+    MEDIUMINT("MEDIUMINT","java.lang.Integer","Integer",0),
+    BIT("BIT","java.lang.Boolean","Boolean",0),
+    BIGINT("BIGINT","java.lang.Long","Long",0),
+    FLOAT("FLOAT","java.lang.Float","Float",0),
+    DOUBLE("DOUBLE","java.lang.Double","Double",0),
+    DECIMAL("DECIMAL","java.math.BigDecimal","BigDecimal",1),
+    NUMERIC("NUMERIC","java.math.BigDecimal","BigDecimal",1),
+    BOOLEAN("BOOLEAN","java.lang.Integer","Integer",0),
+    ID("ID","java.lang.Long","Long",0),
+    DATE("DATE","java.util.Date","Date",1),
+    TIME("TIME","java.sql.Time","Time",1),
+    DATETIME("DATETIME","java.sql.Timestamp","Timestamp",1),
+    TIMESTAMP("TIMESTAMP","java.util.Calendar","Calendar",1),
+    YEAR("YEAR","java.util.Date","Date",1),
+    LONGTEXT("LONGTEXT","java.lang.String","String",0),
+    VARBINARY("VARBINARY","java.io.Serializable","Serializable",1),
+    CLOB("CLOB","java.sql.Clob","Clob",1),
+    LONGBLOB("LONGBLOB","Byte []","Byte []",0),
+    MEDIUMTEXT("MEDIUMTEXT","java.lang.String","String",0),
     ;
     private String dataType;
     private String javaType;
     private String simpleType;
-    MysqlFieldTypeEnum(String dataType,String javaType,String simpleType){
+    //对应类型是否需要导包  0 需要  1需要
+    private int isPermitImport;
+    MysqlFieldTypeEnum(String dataType,String javaType,String simpleType,int isPermitImport){
         this.dataType=dataType;
         this.javaType=javaType;
         this.simpleType=simpleType;
+        this.isPermitImport=isPermitImport;
     }
 
     public String getDataType() {
@@ -59,5 +69,13 @@ public enum MysqlFieldTypeEnum {
 
     public void setSimpleType(String simpleType) {
         this.simpleType = simpleType;
+    }
+
+    public int getIsPermitImport() {
+        return isPermitImport;
+    }
+
+    public void setIsPermitImport(int isPermitImport) {
+        this.isPermitImport = isPermitImport;
     }
 }
