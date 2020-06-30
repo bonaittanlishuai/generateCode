@@ -1,4 +1,4 @@
-package com.data.delegate;
+package com.data.strategy;
 
 import com.data.PathUtils;
 import com.data.enums.GenerateInfoInitEnum;
@@ -11,7 +11,7 @@ import java.util.Map;
  * @Author tanlishuai
  * @Date 2020-06-24 10:30
  */
-public class GenerateInfoDelegate {
+public class GenerateInfoStrategy {
     /**
      * key 是  fileTypeEnum 的key
      */
@@ -24,14 +24,14 @@ public class GenerateInfoDelegate {
         container.put("generateFileDir", PathUtils.getWorkDir());
     }
 
-    private GenerateInfoDelegate(){
-        if(InnerClass.generateInfoDelegate!=null){
+    private GenerateInfoStrategy(){
+        if(InnerClass.generateInfoStrategy!=null){
             throw new NullPointerException("不能通过反射创建该类");
         }
     }
 
-    public static GenerateInfoDelegate getInstance(){
-        return InnerClass.generateInfoDelegate;
+    public static GenerateInfoStrategy getInstance(){
+        return InnerClass.generateInfoStrategy;
     }
 
     public static String getValue(String key){
@@ -44,7 +44,7 @@ public class GenerateInfoDelegate {
 
 
     private static class InnerClass{
-        private static GenerateInfoDelegate generateInfoDelegate=new GenerateInfoDelegate();
+        private static GenerateInfoStrategy generateInfoStrategy=new GenerateInfoStrategy();
     }
 
 }

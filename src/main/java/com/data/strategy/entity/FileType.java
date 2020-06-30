@@ -1,4 +1,4 @@
-package com.data.delegate.entity;
+package com.data.strategy.entity;
 
 /**
  * @Description

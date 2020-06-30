@@ -17,8 +17,11 @@ import java.util.List;
  */
 public class ${serviceImplClassName} implements ${serviceClassName} {
 
+    private  ${daoClassName}  ${daoAliasName};
 
-    private  ${daoClassName}  ${daoAliasName}= (${daoClassName})ApplicationContextBean.getBean("${daoImplAliasName}");
+    public ${serviceImplClassName}(${daoClassName}  ${daoAliasName}){
+
+    }
 
     @Override
     public int insert(${entityClassName} ${entityAliasName}) {
@@ -27,7 +30,7 @@ public class ${serviceImplClassName} implements ${serviceClassName} {
 
     @Override
     public int update(${entityClassName} ${entityAliasName}) {
-        return ${daoAliasName}.update(sysValidationEntity);
+        return ${daoAliasName}.update(${entityAliasName});
     }
 
     @Override

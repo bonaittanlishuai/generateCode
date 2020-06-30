@@ -91,10 +91,10 @@ public abstract class AbstractMetaData implements MetaData {
 
     private List<Map<String, String>> getTableNames(DatabaseMetaData meteData) {
         List<String> searchTableName = getSearchTableName();
+        List<Map<String, String>> tableNames = new LinkedList<>();
         for (String tableNamePattern : searchTableName) {
             try {
                 ResultSet rs = meteData.getTables(null, "%", tableNamePattern, new String[]{"TABLE"});
-                List<Map<String, String>> tableNames = new LinkedList<>();
                 while (rs.next()) {
                     HashMap<String, String> map = new HashMap<>();
                     String tableName = rs.getString("TABLE_NAME");
@@ -106,12 +106,11 @@ public abstract class AbstractMetaData implements MetaData {
                         tableNames.add(map);
                     }
                 }
-                return tableNames;
             } catch (SQLException e) {
                 e.printStackTrace();
             }
         }
-        return null;
+        return tableNames;
 
     }
 

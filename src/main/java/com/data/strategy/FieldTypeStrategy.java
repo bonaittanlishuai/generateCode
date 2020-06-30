@@ -1,6 +1,6 @@
-package com.data.delegate;
+package com.data.strategy;
 
-import com.data.delegate.entity.FieldType;
+import com.data.strategy.entity.FieldType;
 import com.data.enums.DbStateEnum;
 import com.data.enums.MysqlFieldTypeEnum;
 
@@ -14,7 +14,7 @@ import java.util.Map;
  * @Author tanlishuai
  * @Date 2020-06-24 8:57
  */
-public class FieldTypeDelegate {
+public class FieldTypeStrategy {
     /**
      * key 是  数据库标识
      */
@@ -45,15 +45,15 @@ public class FieldTypeDelegate {
         container.put(DbStateEnum.ORACLE.getState(),oracleFiledList);
     }
 
-    private FieldTypeDelegate(){
-        if(InnerClass.fieldTypeDelegate!=null){
+    private FieldTypeStrategy(){
+        if(InnerClass.fieldTypeStrategy!=null){
             throw new NullPointerException("不能通过反射创建该类");
         }
     }
 
 
-    public static FieldTypeDelegate getInstance(){
-        return InnerClass.fieldTypeDelegate;
+    public static FieldTypeStrategy getInstance(){
+        return InnerClass.fieldTypeStrategy;
     }
     /**
      * 获得 字段类型
@@ -66,6 +66,6 @@ public class FieldTypeDelegate {
 
 
     private static class InnerClass{
-        private static FieldTypeDelegate fieldTypeDelegate=new FieldTypeDelegate();
+        private static FieldTypeStrategy fieldTypeStrategy=new FieldTypeStrategy();
     }
 }

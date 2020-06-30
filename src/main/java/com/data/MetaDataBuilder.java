@@ -1,7 +1,6 @@
 package com.data;
 
-import com.data.delegate.MetaDataDelegate;
-import com.data.enums.DbStateEnum;
+import com.data.strategy.MetaDataStrategy;
 import com.data.properties.BaseProperties;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public class MetaDataBuilder {
         String url = properites.getProperty("url");
         String user =properites.getProperty("user");
         String password=properites.getProperty("password");
-        MetaData metaData = MetaDataDelegate.getInstance().getMetaData(dataState).setUrl(url).setUser(user).setPassword(password);
+        MetaData metaData = MetaDataStrategy.getInstance().getMetaData(dataState).setUrl(url).setUser(user).setPassword(password);
         List<TableData> tableData = metaData.getTableData();
         if(tableData.size()==0){
             throw new NullPointerException("表过滤异常tableName 数据库不存在对应的表");

@@ -1,12 +1,12 @@
 package com.template;
 
 import com.data.*;
-import com.data.delegate.ExclusiveDirDelegate;
-import com.data.delegate.FieldTypeDelegate;
-import com.data.delegate.GenerateInfoDelegate;
-import com.data.delegate.entity.FieldType;
+import com.data.strategy.ExclusiveDirStrategy;
+import com.data.strategy.FieldTypeStrategy;
+import com.data.strategy.GenerateInfoStrategy;
+import com.data.strategy.entity.FieldType;
 import com.data.enums.FileTypeEnum;
-import com.data.enums.JavaKeyWord;
+import com.data.enums.JavaKeyWordEnum;
 import com.data.properties.GenerateProperties;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -96,7 +96,7 @@ public abstract class AbstractTempalteBuilder {
         if(state==null || "".equals(state)){
             return "";
         }
-        return ExclusiveDirDelegate.getInstance().getResult(state, fileInfo);
+        return ExclusiveDirStrategy.getInstance().getResult(state, fileInfo);
     }
 
     protected List<TemplateData> getTemplateData() {
@@ -131,9 +131,10 @@ public abstract class AbstractTempalteBuilder {
         detailInfo.setColumnRemark(tableDetailInfo.getColumnRemark());
         String fieldName = lineToHump(columnName);
         //如果字段名与java关键字相等则进行转换
-        for (JavaKeyWord javaKeyWord : JavaKeyWord.values()) {
-            if(javaKeyWord.getKeyWord().equalsIgnoreCase(fieldName)){
-                fieldName=javaKeyWord.getChangeName();
+        for (JavaKeyWordEnum JavaKeyWordEnum : JavaKeyWordEnum.values()) {
+            if(JavaKeyWordEnum.getKeyWord().equalsIgnoreCase(fieldName)){
+                fieldName=JavaKeyWordEnum.getChangeName();
+                break;
             }
         }
         detailInfo.setFieldName(fieldName);
@@ -153,7 +154,7 @@ public abstract class AbstractTempalteBuilder {
      */
     private void setEntityImportPackage(TemplateData templateData, String dbState) {
         Set<String> entityImportPackageSet = new LinkedHashSet<>();
-        List<FieldType> fieldTypes = FieldTypeDelegate.getInstance().getFieldTypeList(dbState);
+        List<FieldType> fieldTypes = FieldTypeStrategy.getInstance().getFieldTypeList(dbState);
         for (TemplateData.DetailInfo detailInfo : templateData.getTableDetailInfos()) {
             //基本数据类型的包装类 与 string 不用导包, 标记为 isPermistImport为 1
             String fieldType = detailInfo.getFieldType();
@@ -169,8 +170,8 @@ public abstract class AbstractTempalteBuilder {
 
     protected void setRowInfo(TableData metaDatum, TemplateData templateData) {
         String tableName = metaDatum.getTableName();
-        for (JavaKeyWord javaKeyWord : JavaKeyWord.values()) {
-            if(javaKeyWord.getKeyWord().equalsIgnoreCase(tableName)){
+        for (JavaKeyWordEnum JavaKeyWordEnum : JavaKeyWordEnum.values()) {
+            if(JavaKeyWordEnum.getKeyWord().equalsIgnoreCase(tableName)){
                 throw new ClassCastException("表名不能与java关键字相同");
             }
         }
@@ -254,7 +255,7 @@ public abstract class AbstractTempalteBuilder {
             String key = enumeration.nextElement();
             String value = properites.getProperty(key);
             if(value==null || "".equals(value)){
-                properites.setProperty(key, GenerateInfoDelegate.getValue(key));
+                properites.setProperty(key, GenerateInfoStrategy.getValue(key));
             }
         }
         //更新
@@ -264,7 +265,7 @@ public abstract class AbstractTempalteBuilder {
     protected void setJavaType(TemplateData.DetailInfo detailInfo, String dbState) {
         String columnType = detailInfo.getColumnType();
         boolean isExistType=false;
-        List<FieldType> fieldTypeList = FieldTypeDelegate.getInstance().getFieldTypeList(dbState);
+        List<FieldType> fieldTypeList = FieldTypeStrategy.getInstance().getFieldTypeList(dbState);
         for (FieldType fieldType : fieldTypeList) {
             if(fieldType.getDataType().equalsIgnoreCase(columnType)){
                 detailInfo.setFieldSimpleType((fieldType.getSimpleType()));

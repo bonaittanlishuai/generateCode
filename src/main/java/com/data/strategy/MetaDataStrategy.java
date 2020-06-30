@@ -1,4 +1,4 @@
-package com.data.delegate;
+package com.data.strategy;
 
 import com.data.MetaData;
 import com.data.MySqlMetaData;
@@ -13,7 +13,7 @@ import java.util.Map;
  * @Author tanlishuai
  * @Date 2020-06-24 14:38
  */
-public class MetaDataDelegate {
+public class MetaDataStrategy {
     /**
      *  DbStateEnum 的key 作为 key
      */
@@ -24,14 +24,14 @@ public class MetaDataDelegate {
         container.put(DbStateEnum.ORACLE.getState(),new OracleMetaData());
     }
 
-    private MetaDataDelegate(){
-        if(InnerClass.metaDataDelegate!=null){
+    private MetaDataStrategy(){
+        if(InnerClass.metaDataStrategy!=null){
             throw new NullPointerException("不能通过反射创建该类");
         }
     }
 
-    public static MetaDataDelegate getInstance(){
-        return InnerClass.metaDataDelegate;
+    public static MetaDataStrategy getInstance(){
+        return InnerClass.metaDataStrategy;
     }
 
     public MetaData getMetaData(String key){
@@ -43,6 +43,6 @@ public class MetaDataDelegate {
     }
 
     private static class InnerClass{
-        private static MetaDataDelegate metaDataDelegate=new MetaDataDelegate();
+        private static MetaDataStrategy metaDataStrategy=new MetaDataStrategy();
     }
 }

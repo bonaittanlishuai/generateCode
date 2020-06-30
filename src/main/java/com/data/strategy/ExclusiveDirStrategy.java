@@ -1,13 +1,10 @@
-package com.data.delegate;
+package com.data.strategy;
 
-import com.data.delegate.entity.FieldType;
 import com.data.enums.FileTypeEnum;
 import com.template.FileInfo;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -15,7 +12,7 @@ import java.util.Map;
  * @Author tanlishuai
  * @Date 2020-06-24 11:01
  */
-public class ExclusiveDirDelegate {
+public class ExclusiveDirStrategy {
     /**
      * key  是  fileTypeEnum 的 key  value 是  fileinfo的方法
      */
@@ -44,8 +41,8 @@ public class ExclusiveDirDelegate {
     }
 
 
-    private ExclusiveDirDelegate(){
-        if(InnerClass.exclusiveDirDelegate!=null){
+    private ExclusiveDirStrategy(){
+        if(InnerClass.exclusiveDirStrategy!=null){
             throw new NullPointerException("不能通过反射创建该类");
         }
     }
@@ -54,8 +51,8 @@ public class ExclusiveDirDelegate {
      * 静态内部类初始化
      * @return
      */
-    public static ExclusiveDirDelegate getInstance(){
-        return InnerClass.exclusiveDirDelegate;
+    public static ExclusiveDirStrategy getInstance(){
+        return InnerClass.exclusiveDirStrategy;
     }
     /**
      *
@@ -75,6 +72,6 @@ public class ExclusiveDirDelegate {
     }
 
     private static class InnerClass{
-        private static ExclusiveDirDelegate exclusiveDirDelegate=new ExclusiveDirDelegate();
+        private static ExclusiveDirStrategy exclusiveDirStrategy=new ExclusiveDirStrategy();
     }
 }

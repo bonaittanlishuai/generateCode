@@ -69,6 +69,7 @@ mapperimpl_java.ftl
  ${entityAliasName}  otmsBrand
  ${daoAliasName}  otmsBrandMapper
  ${daoImplAliasName}  otmsBrandMapper
+ ${entityImportPackages} 实体类需要额外导入的包
 
  //表的字段信息
  <#list  tableDetailInfos as tableDetailInfo>
