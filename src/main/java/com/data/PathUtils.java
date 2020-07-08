@@ -17,11 +17,6 @@ public class PathUtils {
     }
 
     public static String getSystemRootPath(){
-        String name=PathUtils.class.getName();
-        name=name.replace(".","/")+".class";
-        URL resource = PathUtils.class.getClassLoader().getResource(name);
-        String path = resource.getPath();
-        int index = path.indexOf(name);
-        return path.substring(0,index);
+        return PathUtils.class.getClassLoader().getResource("").getPath();
     }
 }

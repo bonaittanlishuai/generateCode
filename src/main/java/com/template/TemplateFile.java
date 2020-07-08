@@ -3,12 +3,14 @@ package com.template;
 import com.data.PathUtils;
 import com.data.enums.FileTypeEnum;
 import com.data.properties.GenerateProperties;
+import com.sun.org.apache.xerces.internal.impl.xpath.regex.Match;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Properties;
+import java.util.regex.Matcher;
 
 /**
  * @Description
@@ -120,7 +122,7 @@ public class TemplateFile {
     }
 
     public String changePath(String str){
-        String s = str.replaceAll("\\.", "/");
+        String s = str.replaceAll("\\.", Matcher.quoteReplacement(File.separator));
         if(s.endsWith(File.separator)){
             return s.substring(0,s.length()-1);
         }

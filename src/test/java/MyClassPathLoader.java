@@ -44,7 +44,6 @@ public class MyClassPathLoader extends ClassLoader {
         }
         return null;
        // ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream();
-
     }
 
 }
