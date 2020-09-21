@@ -1,0 +1,272 @@
+
+
+
+
+<as-split direction="vertical" unit="pixel" [disabled]="true" gutterSize="0">
+    <as-split-area class="flex-fixed" [size]="40">
+      <form nz-form   class="ant-advanced-search-form">
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]="8">
+             <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired  >标准编号</nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="标准编号不能为空">
+                <input nz-input name = "code" [(ngModel)]="dataStandard.code"  nzRequired  placeholder="请输入标准编号" disabled />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="8">
+             <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired >标准标识</nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="标准标识不能为空">
+                <input nz-input name="nameIdentifter" [(ngModel)]="dataStandard.nameIdentifter"  nzRequired placeholder="请输入标准标识" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="8">
+             <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired >标准名称</nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="标准名称不能为空">
+                <input nz-input name="name" [(ngModel)]="dataStandard.name" nzRequired  placeholder="请输入标准名称" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]="8">
+             <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired >数据类型</nz-form-label>
+              <nz-form-control [nzSm]="6" [nzXs]="24" nzErrorTip="数据类型不能为空">
+                <nz-select name = "fieldType" [(ngModel)]="dataStandard.fieldType"  (ngModelChange)="typeOnChange($event)">
+                  <nz-option *ngFor="let item of fieldTypes" [nzLabel]="item.lable"  [nzValue]="item.value"></nz-option>
+                </nz-select>
+              </nz-form-control>
+      
+              <nz-form-control [hidden]= "commonHidden" [nzSm]="12" [nzXs]="24" >
+                 <input nz-input name = "typeFormat" [(ngModel)]="dataStandard.typeFormat"  [placeholder]="typePlaceholder" />
+              </nz-form-control>
+              <nz-form-control [hidden] ="dateHidden"  [nzSm]="12" [nzXs]="24" >
+                <nz-select name = "typeFormat" [(ngModel)]="dataStandard.typeFormat">
+                  <nz-option nzValue="yyyy" nzLabel="2018(yyyy)"></nz-option>
+                  <nz-option nzValue="yyyy-MM" nzLabel="2018-09(yyyy-MM)"></nz-option>
+                  <nz-option nzValue="yyyy-MM-dd" nzLabel="2018-09-01(yyyy-MM-dd)"></nz-option>
+                  <nz-option nzValue="yyyy-MM-dd HH:mm:ss" nzLabel="2018-09-01 00:00:00(yyyy-MM-dd HH:mm:ss)"></nz-option>
+                </nz-select>
+             </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="8">
+             <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired >参考标准</nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24">
+                <nz-select   name = "refStandard" [(ngModel)]="dataStandard.refStandard"  nzAllowClear (ngModelChange)="refStandardOnChange($event)" nzPlaceHolder="Choose">
+                  <nz-option *ngFor="let item of refStandards" [nzLabel]="item.lable"  [nzValue]="item.value"></nz-option>
+                </nz-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="8">
+             <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24"  nzRequired>主题分类</nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24" >
+                <nz-tree-select name="category" [nzNodes]="cateNodes" 
+                    nzPlaceHolder="请选择保存目录(不选默认最顶层)" 
+                    [nzMaxTagCount]="5"
+                    [nzDropdownStyle]="{'maxHeight': '300px'}"
+                    [(ngModel)]="dataStandard.cateId">
+                </nz-tree-select>
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+        </div>
+      
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24"  >同义词组</nz-form-label>
+                <nz-form-control  [nzSm]="18" [nzXs]="24" nzErrorTip="字段名不能为空">
+                  <input  nz-input   name="similarWord" [(ngModel)]="dataStandard.similarWordWord" (click) = "clickSimilar()"  (change) = "similarChange()"/>
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" >描述</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24">
+                  <input nz-input  name = "comment" [(ngModel)]="dataStandard.comment"  placeholder="为空时默认与字段名一致" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+        </div>
+        <div nz-row>
+          <div nz-col [nzSpan]="24" class="search-area">
+            <button nz-button [nzType]="'primary'"  (click) = "submit()" >提交</button>
+          </div>
+        </div>
+      </form>
+  
+    </as-split-area>
+  
+    <as-split-area class="flex-fixed" [size]="40">
+      <div class="matech-toolbar">
+        
+        <form #searchOptionsForm="ngForm" nz-form>
+         
+          <nz-form-item  nz-row nzGutter="16">
+            <nz-form-control  nz-col >
+              配置信息
+            </nz-form-control>
+            <nz-form-control nz-col [hidden] = "!refStandardHidden" >
+              <button nz-button [nzType]="'primary'" (click)="openValidateRule()">
+                新增
+              </button>
+            </nz-form-control>
+            <nz-form-control nz-col nzSpan="2" [hidden] = "!refStandardHidden" >
+              <button nz-button [nzType]="'primary'" (click)="opeanBatchDeleted()">
+                批量删除
+              </button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div> 
+    </as-split-area>
+    
+  
+  <as-split-area [size]="'*'" [hidden] = "!refStandardHidden" >
+    <nz-table nzSize="small" [nzLoading]="loading" [nzData]="mapOfValidaetRuleDataSum" nzFrontPagination="true" nzBordered
+      nzShowSizeChanger [nzScroll]="{y:'100%'}" [nzTotal]="count" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize"
+      (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
+      [nzShowTotal]="totalTemplate" [nzPageSizeOptions]="pageSizeOptions">
+      <ng-template #totalTemplate let-total> 共 {{ count }} 条 </ng-template>
+      <thead>
+        <tr>
+          <th nzShowCheckbox [nzChecked]="isAllDisplayDataChecked" (nzCheckedChange)="checkAll($event)"
+            [nzWidth]="'60px'"></th>
+          <th *ngFor="let t of stColumns" [nzWidth]="t.width">{{t.title}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of mapOfValidaetRuleData;index as i">
+          <tr>
+            <td nzShowCheckbox [nzChecked]="item.checked" (nzCheckedChange)="checkAll($event, item)"></td>
+            <td><div> {{ (pageIndex-1) * pageSize + i + 1 }}</div></td>
+            <td>{{item.code}}</td>
+            <td>{{item.value}}</td>
+            <td>
+              <a (click)="openValidateRule(item)">编辑</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="menuTpl">更多<i nz-icon type="down"></i></a>
+              <nz-dropdown-menu #menuTpl="nzDropdownMenu">
+                <ul nz-menu>
+                  <li> 
+                    <nz-popconfirm [nzTitle]="confirmtittle" (nzOnConfirm)="deleteValidateRule(item)">
+                      <ng-template #confirmtittle>
+                        是否确定删除?
+                      </ng-template>
+                      <a nz-popconfirm nz-menu-item style="width: 100px">删除</a>
+                    </nz-popconfirm>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </as-split-area>
+  
+  <as-split-area [size]="'*'" [hidden] = "refStandardHidden">
+    <div display="flex" style="margin:auto">
+      <form nz-form nzGutter="2">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="6">规则校验方式</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="8">
+            {{regValidateRule}}
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="6">正则表达式</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="8">
+            <input nz-input name="reg" [(ngModel)]="reg"/>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+  
+  </as-split-area>
+</as-split>
+  
+  
+  <!-- 新增校验规则窗口 -->
+  <nz-modal [(nzVisible)]="visible" [nzTitle]="validateRuleTitle" (nzOnCancel)="handleCancel()" nzWidth="700">
+    <div display="flex" style="margin:auto">
+      <form nz-form nzGutter="2">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="6">代码编号</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="8">
+            <input nz-input name="code" [(ngModel)]="validateRuleForm.code"/>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="6">代码名称</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="8">
+            <input nz-input name="value" [(ngModel)]="validateRuleForm.value"/>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+      <button nz-button nzType="primary" (click)="saveValidateRule()">确定</button>
+    </div>
+  </nz-modal>
+  
+  
+<!-- 同义词 -->
+<nz-modal [(nzVisible)]="similarVisible" [nzTitle]="'同义词'" (nzOnCancel)="handleSimilarCancel()" nzWidth="1000">
+
+    <nz-table nzSize="small" [nzLoading]="loadingSimilar" [nzData]="mapOfExpandedDataSimilar" nzFrontPagination="false" nzBordered
+      nzShowSizeChanger [nzScroll]="{y:'100%'}" [nzTotal]="countSimilar" [(nzPageIndex)]="pageIndexSimilar" [(nzPageSize)]="pageSizeSimilar"
+      (nzPageIndexChange)="pageIndexChangeSimilar($event)" (nzPageSizeChange)="pageSizeChangeSimilar($event)"
+      [nzShowTotal]="totalTemplateSimilar" [nzPageSizeOptions]="pageSizeOptionsSimilar">
+      <ng-template #totalTemplateSimilar let-total> 共 {{ countSimilar }} 条 </ng-template>
+      <thead>
+        <tr>
+          <th nzShowCheckbox 
+            [nzWidth]="'60px'"></th>
+          <th *ngFor="let t of stColumnsSimilar" [nzWidth]="t.width">{{t.title}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of mapOfExpandedDataSimilar;index as i">
+          <tr>
+            <td nzShowCheckbox [nzChecked]="item.checked" (nzCheckedChange)="checkSimilar($event, item)"></td>
+            <td><div> {{ (pageIndexSimilar-1) * pageSizeSimilar + i + 1 }}</div></td>
+            <td>{{item.code}}</td>
+            <td>{{ item.word}}</td>
+            <td>{{item.comment}}</td>
+            <td>{{item.similarWord }}</td>
+            <td><div> {{item?.createdTime}}</div></td>
+            <td><div> {{item?.lastModifiedTime}}</div></td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="handleSimilarCancel()">取消</button>
+    <button nz-button nzType="primary" (click)="selectSimilar()">确定</button>
+  </div>
+</nz-modal>
+
+  <!-- 批量删除提示窗口 -->
+  <nz-modal [(nzVisible)]="batchVisible" [nzTitle]="'批量删除'" (nzOnCancel)="batchHandleCancel()" nzWidth="700">
+    <div display="flex" style="margin:auto">
+      <span>确定执行批量删除吗?删除后数据不能恢复了</span>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="batchHandleCancel()">取消</button>
+      <button nz-button nzType="primary" (click)="batchDeleteValidateRule()">确定</button>
+    </div>
+  </nz-modal>
+  

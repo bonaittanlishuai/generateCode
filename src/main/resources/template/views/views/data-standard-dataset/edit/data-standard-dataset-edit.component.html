@@ -1,0 +1,186 @@
+<as-split direction="vertical" unit="pixel" [disabled]="true" gutterSize="0">
+    <as-split-area class="flex-fixed" [size]="40">
+      <form nz-form   class="ant-advanced-search-form">
+        <div nz-row [nzGutter]="24">
+          <div nz-col [nzSpan]="8">
+             <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired  >数据集编号</nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24" nzErrorTip="数据集编号不能为空">
+                <input nz-input name = "code" [(ngModel)]="dataset.code"  nzRequired placeholder="请输入数据集编号" disabled />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="8">
+             <nz-form-item>
+              <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired >数据集名称</nz-form-label>
+              <nz-form-control [nzSm]="18" [nzXs]="24">
+                <input nz-input name="datasetName" [(ngModel)]="dataset.datasetName" nzRequired placeholder="请输入数据集标识" />
+              </nz-form-control>
+            </nz-form-item>
+          </div>
+          <div nz-col [nzSpan]="8">
+            <nz-form-item>
+             <nz-form-label [nzSm]="6" [nzXs]="24"  nzRequired>主题分类</nz-form-label>
+             <nz-form-control [nzSm]="18" [nzXs]="24">
+               <nz-tree-select name="category" [nzNodes]="cateNodes" 
+                   nzPlaceHolder="请选择保存目录(不选默认最顶层)" 
+                   [nzMaxTagCount]="5"
+                   [nzDropdownStyle]="{'maxHeight': '300px'}"
+                   [(ngModel)]="dataset.cateId">
+               </nz-tree-select>
+             </nz-form-control>
+           </nz-form-item>
+         </div>
+
+          
+        </div>
+      
+        <div nz-row [nzGutter]="24">
+            <div nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" nzRequired >数据源</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24">
+                  <input nz-input name="datasSource" [(ngModel)]="dataset.datasSource" nzRequired  placeholder="请输入数据源" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+            <div nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24"  >表名</nz-form-label>
+                <nz-form-control  [nzSm]="18" [nzXs]="24" nzErrorTip="字段名不能为空">
+                  <input nz-input  name = "tableName" [(ngModel)]="dataset.tableName" nzRequired  placeholder="表名" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+            <div nz-col [nzSpan]="8">
+              <nz-form-item>
+                <nz-form-label [nzSm]="6" [nzXs]="24" >描述</nz-form-label>
+                <nz-form-control [nzSm]="18" [nzXs]="24">
+                  <input nz-input  name = "comment" [(ngModel)]="dataset.comment"  placeholder="描述" />
+                </nz-form-control>
+              </nz-form-item>
+            </div>
+
+        </div>
+        <div nz-row>
+          <div nz-col [nzSpan]="24" class="search-area">
+            <button nz-button [nzType]="'primary'"  (click) = "submit()" >提交</button>
+          </div>
+        </div>
+      </form>
+  
+    </as-split-area>
+  
+    <as-split-area class="flex-fixed" [size]="40">
+      <div class="matech-toolbar">
+        <form #searchOptionsForm="ngForm" nz-form>
+          <nz-form-item nzFlex="true" nz-row nzGutter="16">
+            <nz-form-control  nz-col [nzSpan]="2">
+                数据项
+            </nz-form-control>
+            <nz-form-control nz-col >
+              <button nz-button [nzType]="'primary'" (click)="openDataItem()">
+                新增
+              </button>
+            </nz-form-control>
+            <nz-form-control nz-col nzSpan="2" >
+              <button nz-button [nzType]="'primary'" (click)="opeanBatchDeleted()">
+                批量删除
+              </button>
+            </nz-form-control>
+          </nz-form-item>
+        </form>
+      </div> 
+    </as-split-area>
+    
+  
+  <as-split-area [size]="'*'" >
+    <nz-table nzSize="small" [nzLoading]="loading" [nzData]="dataItemDatasSum" nzFrontPagination="true" nzBordered
+      nzShowSizeChanger [nzScroll]="{y:'100%'}" [nzTotal]="count" [(nzPageIndex)]="pageIndex" [(nzPageSize)]="pageSize"
+      (nzPageIndexChange)="pageIndexChange($event)" (nzPageSizeChange)="pageSizeChange($event)"
+      [nzShowTotal]="totalTemplate" [nzPageSizeOptions]="pageSizeOptions">
+      <ng-template #totalTemplate let-total> 共 {{ count }} 条 </ng-template>
+      <thead>
+        <tr>
+          <th nzShowCheckbox [nzChecked]="isAllDisplayDataChecked" (nzCheckedChange)="checkAll($event)"
+            [nzWidth]="'60px'"></th>
+          <th *ngFor="let t of stColumns" [nzWidth]="t.width">{{t.title}}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <ng-container *ngFor="let item of dataItemDatas;index as i">
+          <tr>
+            <td nzShowCheckbox [nzChecked]="item.checked" (nzCheckedChange)="checkAll($event, item)"></td>
+            <td><div> {{ (pageIndex-1) * pageSize + i + 1 }}</div></td>
+            <td>{{item.orginFieldName}}</td>
+            <td>{{item.fieldName}}</td>
+            <td>{{item.chinessName}}</td>
+            <td>{{item.isMajorKey}}</td>
+            <td>{{item.fieldType}}</td>
+            <td>{{item.typeFormat}}</td>
+            <td>{{item.comment}}</td>
+            <td>
+              <a (click)="openDataItem(item)">编辑</a>
+              <nz-divider nzType="vertical"></nz-divider>
+              <a nz-dropdown nzPlacement="bottomRight" [nzDropdownMenu]="menuTpl">更多<i nz-icon type="down"></i></a>
+              <nz-dropdown-menu #menuTpl="nzDropdownMenu">
+                <ul nz-menu>
+                  <li> 
+                    <nz-popconfirm [nzTitle]="confirmtittle" (nzOnConfirm)="deleteDataItem(item)">
+                      <ng-template #confirmtittle>
+                        是否确定删除?
+                      </ng-template>
+                      <a nz-popconfirm nz-menu-item style="width: 100px">删除</a>
+                    </nz-popconfirm>
+                  </li>
+                </ul>
+              </nz-dropdown-menu>
+            </td>
+          </tr>
+        </ng-container>
+      </tbody>
+    </nz-table>
+  </as-split-area>
+  
+</as-split>
+  
+  
+  
+  
+  <!-- 新增校验规则窗口 -->
+  <!-- <nz-modal [(nzVisible)]="visible" [nzTitle]="validateRuleTitle" (nzOnCancel)="handleCancel()" nzWidth="700">
+    <div display="flex" style="margin:auto">
+      <form nz-form nzGutter="2">
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="6">代码编号</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="8">
+            <input nz-input name="code" [(ngModel)]="dataItemDataForm.code"/>
+          </nz-form-control>
+        </nz-form-item>
+        <nz-form-item>
+          <nz-form-label [nzSm]="6" [nzXs]="6">代码名称</nz-form-label>
+          <nz-form-control [nzSm]="12" [nzXs]="8">
+            <input nz-input name="value" [(ngModel)]="dataItemDataForm.value"/>
+          </nz-form-control>
+        </nz-form-item>
+      </form>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">取消</button>
+      <button nz-button nzType="primary" (click)="saveDataItem()">确定</button>
+    </div>
+  </nz-modal> -->
+  
+  
+  <!-- 批量删除提示窗口 -->
+  <nz-modal [(nzVisible)]="batchVisible" [nzTitle]="'批量删除'" (nzOnCancel)="batchHandleCancel()" nzWidth="700">
+    <div display="flex" style="margin:auto">
+      <span>确定执行批量删除吗?删除后数据不能恢复了</span>
+    </div>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="batchHandleCancel()">取消</button>
+      <button nz-button nzType="primary" (click)="batchDeleteDataItem()">确定</button>
+    </div>
+  </nz-modal>
+  
