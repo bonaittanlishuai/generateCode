@@ -8,8 +8,8 @@
 #baseMessage.properties的参数说明
 访问路径，暂时只支持mysql  url 路径  user 用户名 password密码
 url=jdbc:mysql://119.23.79.3:3306/cg_goods?characterEncoding=utf8&useSSL=false&serverTimezone=UTC
-user=root
-password=admin
+user=**
+password=**
 
 #generateinfo.properties 生成信息的配置
 包名
