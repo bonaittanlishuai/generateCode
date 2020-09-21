@@ -1,7 +1,7 @@
 # generateCode
 代码生成器
 
-环境配置  java版本最好1.6以上吧 maven
+环境配置  java版本最好1.6以上 maven
 #使用说用
 执行 com下面的 StartMain
 
