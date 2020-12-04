@@ -12,6 +12,7 @@ import com.data.properties.GenerateProperties;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import freemarker.template.Version;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -22,7 +23,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @Description
+ * @Description 用mybatis生成的
  * @Author tanlishuai
  * @Date 2020-05-09 9:20
  */
@@ -35,14 +36,15 @@ public class FreemarkerBuilder extends AbstractTempalteBuilder{
      */
     @Override
     public void generateTemplate() throws IOException, TemplateException {
-        Configuration configuration = new Configuration();
-        String ftlDir=PathUtils.getSystemRootPath()+TemplateFile.DEFAULT_DIR;
+        Version version = new Version("2.3.23");
+        Configuration configuration = new Configuration(version);
+        String ftlDir=PathUtils.getSystemRootPath()+MybatisTemplateFile.MYBATIS_DEFAULT_DIR;
         configuration.setDirectoryForTemplateLoading(new File(ftlDir));
         //生成模板所需要的數據
         List<TemplateData> templateDatas = getTemplateData();
 
         //獲取指定目錄下面的所有ftl文件
-        TemplateFile templateFile = new TemplateFile();
+        MybatisTemplateFile templateFile = new MybatisTemplateFile();
         List<FileInfo> appointDirFileNames = templateFile.getAppointDirFileName();
         //设置生成文件的名称
         for (TemplateData templateData : templateDatas) {

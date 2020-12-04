@@ -1,5 +1,5 @@
 import com.template.FileInfo;
-import com.template.TemplateFile;
+import com.template.MybatisTemplateFile;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class TemplateDemo {
     public static void main(String[] args) {
-        TemplateFile templateFile = new TemplateFile();
+        MybatisTemplateFile  templateFile = new MybatisTemplateFile();
         List<FileInfo> appointDirFileName = templateFile.getAppointDirFileName();
     }
 

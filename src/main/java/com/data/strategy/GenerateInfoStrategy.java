@@ -15,7 +15,7 @@ public class GenerateInfoStrategy {
     /**
      * key 是  fileTypeEnum 的key
      */
-    private static Map<String,String> container=new HashMap<>();
+    private static Map<String,String> container=new HashMap<String,String>();
 
     static{
         for (GenerateInfoInitEnum generateInfoInitEnum : GenerateInfoInitEnum.values()) {

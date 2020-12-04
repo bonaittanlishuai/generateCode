@@ -15,16 +15,16 @@ import java.util.Properties;
  * @Author tanlishuai
  * @Date 2020-05-09 9:37
  */
-public class TemplateFile {
+public class MybatisTemplateFile {
 
     private String dir;
 
-    public static final String DEFAULT_DIR="template";
+    public static String MYBATIS_DEFAULT_DIR="template/mybatis";
 
     public  List<FileInfo> getAppointDirFileName(){
         String systemRootPath = PathUtils.getSystemRootPath();
         if(dir==null){
-            dir=DEFAULT_DIR;
+            dir=MYBATIS_DEFAULT_DIR;
         }
         File file = new File(systemRootPath + dir);
         List<FileInfo> fileNames = new LinkedList<FileInfo>();
@@ -127,4 +127,7 @@ public class TemplateFile {
         return s;
     }
 
+    public void setDir(String dir) {
+        this.dir = dir;
+    }
 }

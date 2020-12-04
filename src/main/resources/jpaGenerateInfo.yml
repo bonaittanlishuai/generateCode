@@ -1,0 +1,28 @@
+#jpa的生成模板参数
+controllerPackage:
+  com.mt.newframework.controller.me
+servicePackage:
+  com.mt.newframework.service.me
+serviceImplPackage:
+  com.mt.newframework.service.me.impl
+entityPackage:
+  com.mt.newframework.entity.me
+modelPackage:
+  com.mt.newframework.model.me
+mapperPackage:
+  com.mt.newframework.mapper.me
+repositoryPackage:
+  com.mt.newframework.repository.me
+viewFilePath:
+
+
+
+viewFilePath=/view
+generateFileDir=
+
+#ȥ����ǰ׺
+removePrefix=
+#ȥ���ĺ�׺
+removeSuffix=
+#ָ�����ɵı� ����ǿջ��� * ��ʾȫ��  ����������Զ��Ÿ��� ��������������Ķ�Ӧ��  fr_* ��ʲô��ͷ��  ��ʲô��β�� *_fr
+tableName=me

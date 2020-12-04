@@ -153,7 +153,7 @@ public abstract class AbstractTempalteBuilder {
      * @Param 对应数据的表示
      */
     private void setEntityImportPackage(TemplateData templateData, String dbState) {
-        Set<String> entityImportPackageSet = new LinkedHashSet<>();
+        Set<String> entityImportPackageSet = new LinkedHashSet<String>();
         List<FieldType> fieldTypes = FieldTypeStrategy.getInstance().getFieldTypeList(dbState);
         for (TemplateData.DetailInfo detailInfo : templateData.getTableDetailInfos()) {
             //基本数据类型的包装类 与 string 不用导包, 标记为 isPermistImport为 1
@@ -163,7 +163,6 @@ public abstract class AbstractTempalteBuilder {
                     entityImportPackageSet.add(fieldType);
                 }
             }
-
         }
         templateData.setEntityImportPackages(entityImportPackageSet);
     }

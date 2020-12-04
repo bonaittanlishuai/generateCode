@@ -28,7 +28,7 @@ public abstract class AbstractMetaData implements MetaData {
     private List<String> getSearchTableName() {
         Properties properites = GenerateProperties.getProperites();
         Object tableName = properites.get("tableName");
-        List<String> resultList = new LinkedList<>();
+        List<String> resultList = new LinkedList<String>();
         if (tableName == null || "".equals(tableName)) {
             resultList.add("%");
             return resultList;

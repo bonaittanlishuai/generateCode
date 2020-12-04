@@ -39,11 +39,11 @@ public class JavassistDemo {
 
         String path = JavassistDemo.class.getClassLoader().getResource("").getPath();
         System.err.println(path);
-        sun.tools.java.ClassPath classPath = new sun.tools.java.ClassPath("E:\\work\\com\\mt\\newframework\\enums\\test");
-       // ClassPathLoader classPathLoader = new ClassPathLoader(classPath);
-        ClassLoader classPathLoader = new MyClassPathLoader("E:\\work\\");
-        Class<?> aClass = classPathLoader.loadClass("com.mt.newframework.enums.test");
-        System.err.println(aClass.getName());
+//        sun.tools.java.ClassPath classPath = new sun.tools.java.ClassPath("E:\\work\\com\\mt\\newframework\\enums\\test");
+//       // ClassPathLoader classPathLoader = new ClassPathLoader(classPath);
+//        ClassLoader classPathLoader = new MyClassPathLoader("E:\\work\\");
+//        Class<?> aClass = classPathLoader.loadClass("com.mt.newframework.enums.test");
+//        System.err.println(aClass.getName());
 
 //        new ByteArrayInputStream()
 

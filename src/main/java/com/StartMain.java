@@ -16,7 +16,7 @@ import java.nio.CharBuffer;
  */
 public class StartMain {
     public static void main(String[] args) throws Exception {
-        FreemarkerBuilder freemarkerBuilder = new SpringBeanXmlBuilder();
+        FreemarkerBuilder freemarkerBuilder = new FreemarkerBuilder();
         freemarkerBuilder.generateTemplate();
     }
 }

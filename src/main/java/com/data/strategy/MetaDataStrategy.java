@@ -17,7 +17,7 @@ public class MetaDataStrategy {
     /**
      *  DbStateEnum 的key 作为 key
      */
-    private static Map<String,MetaData> container=new HashMap<>();
+    private static Map<String,MetaData> container=new HashMap<String,MetaData>();
 
     static{
         container.put(DbStateEnum.MYSQL.getState(),new MySqlMetaData());

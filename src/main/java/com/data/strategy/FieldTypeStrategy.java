@@ -21,7 +21,7 @@ public class FieldTypeStrategy {
     private static Map<String,List<FieldType>> container=new HashMap<String,List<FieldType>>();
 
     static{
-        List<FieldType> mysqlFiledList=new LinkedList<>();
+        List<FieldType> mysqlFiledList=new LinkedList<FieldType>();
         FieldType fieldType=null;
         for (MysqlFieldTypeEnum mysqlFieldTypeEnum : MysqlFieldTypeEnum.values()) {
             fieldType = new FieldType();
