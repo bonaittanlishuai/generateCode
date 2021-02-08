@@ -1,7 +1,7 @@
 package com.data.strategy;
 
 import com.data.enums.FileTypeEnum;
-import com.template.FileInfo;
+import com.template.file.mybatis.FileInfo;
 
 import java.lang.reflect.Method;
 import java.util.HashMap;

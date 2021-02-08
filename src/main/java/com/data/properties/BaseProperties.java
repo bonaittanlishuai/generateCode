@@ -1,7 +1,10 @@
 package com.data.properties;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStreamWriter;
+import java.net.URL;
 import java.util.Properties;
 
 /**
@@ -11,45 +14,55 @@ import java.util.Properties;
  */
 public class BaseProperties {
 
-    private String resourceFile;
-
     private static final String DEFAULT_FILE="baseMessage.properties";
-
-    private String mkdir;
+    private static Properties properties = new Properties();
 
     public BaseProperties(){
-
     }
 
-    public BaseProperties(String mkdir,String resourceFile){
-        this.resourceFile=resourceFile;
-        this.mkdir=mkdir;
-    }
 
-    public BaseProperties(String resourceFile){
-        this.resourceFile=resourceFile;
-    }
-
-    public  Properties getProperites(){
+    public static Properties getProperites(){
           Properties properties = new Properties();
-
         try {
-            if(resourceFile==null)
-                resourceFile=DEFAULT_FILE;
-            if(mkdir!=null){
-                if(!mkdir.endsWith("/")){
-                    mkdir=mkdir+"/";
-                }
-                resourceFile=mkdir+resourceFile;
-            }
-            InputStream resourceAsStream = BaseProperties.class.getClassLoader().getResourceAsStream(resourceFile);
+            InputStream resourceAsStream = BaseProperties.class.getClassLoader().getResourceAsStream(DEFAULT_FILE);
             properties.load(resourceAsStream);
             return properties;
         }catch (IOException e){
             e.printStackTrace();
         }
         return null;
+    }
 
+    public static  Properties generateTemplateType() {
+        String generateTemplateType = BaseProperties.getProperites().getProperty("generateTemplateType");
+        Properties properites = null;
+        if ("jpa".equals(generateTemplateType)) {
+            properites = JpaGenerateProperties.getProperites();
+        } else {
+            properites = GenerateProperties.getProperites();
+        }
+        return properites;
+    }
+
+    public static void setProperties(){
+        try {
+            Properties properites2 = BaseProperties.generateTemplateType();
+            String generateTemplateType = properites2.getProperty("generateTemplateType");
+            String url = null;
+            if ("jpa".equals(generateTemplateType)) {
+                url = JpaGenerateProperties.DEFAULT_FILE;
+            } else {
+                url = GenerateProperties.DEFAULT_FILE;
+            }
+            URL resourceUrl = BaseProperties.class.getClassLoader().getResource(url);
+            FileOutputStream fileOutputStream = new FileOutputStream(resourceUrl.getFile());
+            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream);
+            properites2.store(outputStreamWriter, "Update  key value");
+            fileOutputStream.close();
+            outputStreamWriter.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

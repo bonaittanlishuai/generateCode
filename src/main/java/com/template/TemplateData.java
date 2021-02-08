@@ -41,6 +41,10 @@ public class TemplateData {
     private String entityPackage;
     private String daoPackage;
     private String daoImplPackage;
+
+    private String modelPackage;
+    private String mapperPackage;
+    private String repositoryPackage;
     /**
      * 类名
      */
@@ -50,6 +54,10 @@ public class TemplateData {
     private String entityClassName;
     private String daoClassName;
     private String daoImplClassName;
+
+    private String modelClassName;
+    private String mapperClassName;
+    private String repositoryClassName;
     /**
      * 别名
      */
@@ -59,6 +67,10 @@ public class TemplateData {
     private String entityAliasName;
     private String daoAliasName;
     private String daoImplAliasName;
+
+    private String modelAliasName;
+    private String mapperAliasName;
+    private String repositoryAliasName;
     /**
      * 实体类需要额外导入的包集合ff
      */
@@ -80,6 +92,7 @@ public class TemplateData {
        private String getMethodName;//get方法
        private String setMethodName;//set方法
        private String columnRemark;//列的注释
+       private Integer size;//大小
 
     }
 

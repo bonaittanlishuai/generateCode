@@ -20,8 +20,7 @@ public class MetaDataBuilder {
     }
 
     public List<TableData> getMetaData(){
-        BaseProperties baseProperties = new BaseProperties();
-        Properties properites = baseProperties.getProperites();
+        Properties properites = BaseProperties.getProperites();
         emptyValidate(properites);
         String dataState=properites.getProperty("dataState");
         String url = properites.getProperty("url");

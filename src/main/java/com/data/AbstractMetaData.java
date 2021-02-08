@@ -1,7 +1,7 @@
 package com.data;
 
 import com.data.dbconnection.ConnectionRelease;
-import com.data.properties.GenerateProperties;
+import com.data.properties.BaseProperties;
 
 import java.sql.*;
 import java.util.*;
@@ -26,8 +26,8 @@ public abstract class AbstractMetaData implements MetaData {
     }
 
     private List<String> getSearchTableName() {
-        Properties properites = GenerateProperties.getProperites();
-        Object tableName = properites.get("tableName");
+        Properties properties = BaseProperties.generateTemplateType();
+        Object tableName = properties.get("tableName");
         List<String> resultList = new LinkedList<String>();
         if (tableName == null || "".equals(tableName)) {
             resultList.add("%");
@@ -49,6 +49,15 @@ public abstract class AbstractMetaData implements MetaData {
 
 
     private List<TableData> getTableDetailInfo(DatabaseMetaData meteData, List<Map<String, String>> tableInfos) {
+        Properties properties = BaseProperties.generateTemplateType();
+        String noShowColumns = properties.getProperty("noShowColumns");
+        List<String> noShowColumnList = new ArrayList<>();
+        if(noShowColumns!=null && !"".equals(noShowColumns)) {
+            String[] split = noShowColumns.split(",");
+            for (String s : split) {
+                noShowColumnList.add(s.trim());
+            }
+        }
         List<TableData> dataTables = new LinkedList<>();
         TableData table = null;
         TableDetailInfo tableDetailInfo = null;
@@ -58,14 +67,22 @@ public abstract class AbstractMetaData implements MetaData {
                 table.setTableName(tableInfo.get("tableName"));
                 table.setTableRemark(tableInfo.get("remarks"));
                 //4. 提取表内的字段的名字和类型
-                String columnName;
                 String columnType;
                 String columnRemark;
                 ResultSet colRet = meteData.getColumns(null, "%", table.getTableName(), "%");
                 LinkedList<TableDetailInfo> tableDetailInfos = new LinkedList<>();
                 while (colRet.next()) {
+                    String columnName = colRet.getString("COLUMN_NAME");
+                    // 过滤字段
+                    if(noShowColumnList.size()>0){
+                        boolean isExist =noShowColumnList.stream().anyMatch(column -> {
+                            return column.equals(columnName);
+                        });
+                        if(isExist) {
+                            continue;
+                        }
+                    }
                     tableDetailInfo = new TableDetailInfo();
-                    columnName = colRet.getString("COLUMN_NAME");
                     columnType = colRet.getString("TYPE_NAME");
                     columnRemark = colRet.getString("REMARKS");
                     int datasize = colRet.getInt("COLUMN_SIZE");

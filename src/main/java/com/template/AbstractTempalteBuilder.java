@@ -1,6 +1,7 @@
 package com.template;
 
 import com.data.*;
+import com.data.properties.BaseProperties;
 import com.data.strategy.ExclusiveDirStrategy;
 import com.data.strategy.FieldTypeStrategy;
 import com.data.strategy.GenerateInfoStrategy;
@@ -8,6 +9,7 @@ import com.data.strategy.entity.FieldType;
 import com.data.enums.FileTypeEnum;
 import com.data.enums.JavaKeyWordEnum;
 import com.data.properties.GenerateProperties;
+import com.template.file.mybatis.FileInfo;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
@@ -31,7 +33,7 @@ public abstract class AbstractTempalteBuilder {
     }
 
     private  void init(){
-        Properties properites = GenerateProperties.getProperites();
+        Properties properites = BaseProperties.generateTemplateType();
         generateInfoCheckAndInit(properites);
     }
 
@@ -129,6 +131,7 @@ public abstract class AbstractTempalteBuilder {
         detailInfo.setColumnType(tableDetailInfo.getCOLUMN_TYPE());
         detailInfo.setColumnName(columnName);
         detailInfo.setColumnRemark(tableDetailInfo.getColumnRemark());
+        detailInfo.setSize(tableDetailInfo.COLUMN_SIZE);
         String fieldName = lineToHump(columnName);
         //如果字段名与java关键字相等则进行转换
         for (JavaKeyWordEnum JavaKeyWordEnum : JavaKeyWordEnum.values()) {
@@ -231,7 +234,6 @@ public abstract class AbstractTempalteBuilder {
     }
 
     protected void setPackageInfo(TemplateData templateData) {
-        GenerateProperties generateProperties = new GenerateProperties();
         Properties properites = GenerateProperties.getProperites();
         String controllerPackage = properites.getProperty("controllerPackage");
         String servicePackage = properites.getProperty("servicePackage");
@@ -258,7 +260,7 @@ public abstract class AbstractTempalteBuilder {
             }
         }
         //更新
-        GenerateProperties.setProperties();
+        BaseProperties.setProperties();
     }
 
     protected void setJavaType(TemplateData.DetailInfo detailInfo, String dbState) {

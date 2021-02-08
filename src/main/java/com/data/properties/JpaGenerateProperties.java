@@ -14,7 +14,7 @@ import java.util.Properties;
  */
 public class JpaGenerateProperties {
 
-    private static final String DEFAULT_FILE="jpaGenerateInfo.properties";
+    public static final String DEFAULT_FILE="jpaGenerateInfo.properties";
 
     private static Properties properties = new Properties();
     public static Properties getProperites(){
@@ -39,6 +39,5 @@ public class JpaGenerateProperties {
        } catch (Exception e) {
            e.printStackTrace();
        }
-
    }
 }

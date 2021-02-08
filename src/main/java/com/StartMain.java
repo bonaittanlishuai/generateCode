@@ -1,13 +1,7 @@
 package com;
 
-import com.template.FreemarkerBuilder;
-import com.template.SpringBeanXmlBuilder;
-import freemarker.template.TemplateException;
-
-import java.io.*;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.nio.CharBuffer;
+import com.template.jpa.JpaFreemarkerBuilder;
+import com.template.mybatis.FreemarkerBuilder;
 
 /**
  * @Description
@@ -16,7 +10,7 @@ import java.nio.CharBuffer;
  */
 public class StartMain {
     public static void main(String[] args) throws Exception {
-        FreemarkerBuilder freemarkerBuilder = new FreemarkerBuilder();
+        JpaFreemarkerBuilder freemarkerBuilder = new JpaFreemarkerBuilder();
         freemarkerBuilder.generateTemplate();
     }
 }

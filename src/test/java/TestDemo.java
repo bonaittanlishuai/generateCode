@@ -1,4 +1,4 @@
-import com.template.FreemarkerBuilder;
+import com.template.mybatis.FreemarkerBuilder;
 import freemarker.template.TemplateException;
 
 import java.io.IOException;

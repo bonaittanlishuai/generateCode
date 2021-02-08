@@ -1,5 +1,5 @@
-import com.template.FileInfo;
-import com.template.MybatisTemplateFile;
+import com.template.file.mybatis.FileInfo;
+import com.template.file.mybatis.MybatisTemplateFile;
 
 import java.util.List;
 

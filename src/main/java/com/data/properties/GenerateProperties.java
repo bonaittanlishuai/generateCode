@@ -11,7 +11,7 @@ import java.util.Properties;
  */
 public class GenerateProperties {
 
-    private static final String DEFAULT_FILE="generateInfo.properties";
+    public static final String DEFAULT_FILE="generateInfo.properties";
 
     private static Properties properties = new Properties();
     public static Properties getProperites(){
